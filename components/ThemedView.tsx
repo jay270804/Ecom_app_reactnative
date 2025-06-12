@@ -1,14 +1,39 @@
 import { View, type ViewProps } from 'react-native';
-
-import { useThemeColor } from '@/hooks/useThemeColor';
+import { useColorScheme } from 'nativewind';
 
 export type ThemedViewProps = ViewProps & {
-  lightColor?: string;
-  darkColor?: string;
+  variant?: 'primary' | 'secondary' | 'muted' | 'background';
 };
 
-export function ThemedView({ style, lightColor, darkColor, ...otherProps }: ThemedViewProps) {
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+export function ThemedView({
+  style,
+  variant = 'background',
+  ...otherProps
+}: ThemedViewProps) {
+  const { colorScheme } = useColorScheme();
 
-  return <View style={[{ backgroundColor }, style]} {...otherProps} />;
+  // Use Gluestack UI color tokens
+  const getBackgroundColor = () => {
+    switch (variant) {
+      case 'primary':
+        return 'rgb(var(--color-primary-500))';
+      case 'secondary':
+        return 'rgb(var(--color-secondary-100))';
+      case 'muted':
+        return 'rgb(var(--color-background-muted))';
+      case 'background':
+      default:
+        return 'rgb(var(--color-background-0))';
+    }
+  };
+
+  return (
+    <View
+      style={[
+        { backgroundColor: getBackgroundColor() },
+        style
+      ]}
+      {...otherProps}
+    />
+  );
 }
