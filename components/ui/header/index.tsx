@@ -5,6 +5,7 @@ import { useColorScheme } from 'nativewind';
 import React from 'react';
 import { Image as RNImage } from 'react-native';
 import { headerStyle } from './styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface HeaderProps {
   title?: string;
@@ -25,12 +26,14 @@ export function Header({
   rightAction
 }: HeaderProps) {
   const { colorScheme } = useColorScheme();
+  const insets = useSafeAreaInsets()
 
   return (
     <Box
       className={headerStyle({
         theme: colorScheme === 'dark' ? 'dark' : 'light'
       })}
+      style={{marginTop:insets.top}}
     >
       <Box className="flex-row items-center gap-3">
         {showLogo && (
@@ -40,7 +43,7 @@ export function Header({
           />
         )}
         <Text
-          className="font-light text-primary-500"
+          className="font-light text-typography-900"
           size="md"
         >
           {title}
@@ -54,7 +57,7 @@ export function Header({
           action={rightAction.action || "primary"}
           size="md"
         >
-          <ButtonText>{rightAction.label}</ButtonText>
+          <ButtonText className='text-typography-900'>{rightAction.label}</ButtonText>
         </Button>
       )}
     </Box>

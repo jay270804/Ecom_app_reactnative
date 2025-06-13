@@ -9,6 +9,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -23,18 +24,31 @@ export default function RootLayout() {
   }
 
   return (
-    <GluestackUIProvider mode={colorScheme || 'light'}>
-      <NavigationThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="auth/login" options={{ headerShown: false }} />
-          <Stack.Screen name="auth/register" options={{ headerShown: false }} />
-          <Stack.Screen name="checkout/index" options={{ headerShown: false }} />
-          <Stack.Screen name="product/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </NavigationThemeProvider>
-    </GluestackUIProvider>
+    <SafeAreaProvider>
+      <GluestackUIProvider mode={colorScheme || "light"}>
+        <NavigationThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="auth/register"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="checkout/index"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="product/[id]"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </NavigationThemeProvider>
+      </GluestackUIProvider>
+    </SafeAreaProvider>
   );
 }

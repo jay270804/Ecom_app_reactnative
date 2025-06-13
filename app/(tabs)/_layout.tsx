@@ -1,6 +1,7 @@
 import { HapticTab } from "@/app-example/components/HapticTab";
 import TabBarBackground from "@/app-example/components/ui/TabBarBackground";
 import { Header } from "@/components/ui/header";
+import { CustomTabBar } from "@/components/ui/tab-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
 import { Platform, useColorScheme } from "react-native";
@@ -15,7 +16,6 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
@@ -24,6 +24,7 @@ export default function TabLayout() {
           default: {},
         }),
       }}
+      tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tabs.Screen
         name="index"
@@ -32,7 +33,7 @@ export default function TabLayout() {
           headerTitleStyle: {
             fontWeight: "bold",
           },
-          headerTitle: () => (
+          header: () => (
             <Header
               title="Home"
               rightAction={{

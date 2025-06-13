@@ -13,7 +13,9 @@ export interface Product {
   name: string;
   price: number;
   description: string;
-  image: string;
+  image: any; // React Native ImageSourcePropType
+  discountPercentage?: number; // Optional discount percentage (0-100)
+  discountedPrice?: number; // Calculated discounted price
 }
 
 export interface CartItem {
