@@ -1,65 +1,46 @@
-import { Box } from '@/components/ui/box';
-import { Button, ButtonText } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { useColorScheme } from 'nativewind';
-import React from 'react';
-import { Image as RNImage } from 'react-native';
-import { headerStyle } from './styles';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Box } from "@/components/ui/box";
+import { Image } from "@/components/ui/image";
+import { Input, InputField, InputSlot } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
+import React from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import { SearchIcon } from '@/components/ui/icon'; // Uncomment if you have a vector SearchIcon
 
-interface HeaderProps {
-  title?: string;
-  showLogo?: boolean;
-  logoSource?: any;
-  rightAction?: {
-    label: string;
-    onPress: () => void;
-    variant?: 'solid' | 'outline';
-    action?: 'primary' | 'secondary' | 'positive' | 'negative';
-  };
-}
-
-export function Header({
-  title = "Header",
-  showLogo = true,
-  logoSource,
-  rightAction
-}: HeaderProps) {
-  const { colorScheme } = useColorScheme();
-  const insets = useSafeAreaInsets()
+export function Header() {
+  const insets = useSafeAreaInsets();
 
   return (
     <Box
-      className={headerStyle({
-        theme: colorScheme === 'dark' ? 'dark' : 'light'
-      })}
-      style={{marginTop:insets.top}}
+      className={`w-full flex-row items-center justify-between px-5 py-4 bg-transparent`}
+      style={{ marginTop: insets.top }}
     >
-      <Box className="flex-row items-center gap-3">
-        {showLogo && (
-          <RNImage
-            source={logoSource || require("@/assets/images/favicon.png")}
-            style={{ width: 40, height: 40, resizeMode: "contain" }}
+      {/* Left: Brand */}
+      <Text className="text-primary-950 font-bold text-[12px] leading-[11.64px] tracking-tight">
+        Brand
+      </Text>
+      <Box className="w-2/3 flex flex-row items-center justify-between gap-4">
+        <Input className="flex-1 flex-row items-center bg-secondary-500 rounded-2xl h-9 mx-2 px-3 border-2 border-secondary-700">
+          <InputSlot className="pl-0 pr-2">
+            {/* If you have a vector icon, use: <InputIcon as={SearchIcon}/> */}
+            <Image
+              source={require("@/assets/images/search_icon.png")}
+              className="w-5 h-5"
+              alt="search_icon"
+            />
+          </InputSlot>
+          <InputField
+            placeholder="Search"
+            type="text"
+            className="text-secondary-800 text-[12px] font-light"
           />
-        )}
-        <Text
-          className="font-light text-typography-900"
-          size="md"
-        >
-          {title}
-        </Text>
+        </Input>
+        {/* TODO: get a high definition svg */}
+        <Image
+          source={require("@/assets/images/cart_icon.png")}
+          className="w-5 h-5"
+          alt="cart_icon"
+        />
       </Box>
-
-      {rightAction && (
-        <Button
-          onPress={rightAction.onPress}
-          variant={rightAction.variant || "outline"}
-          action={rightAction.action || "primary"}
-          size="md"
-        >
-          <ButtonText className='text-typography-900'>{rightAction.label}</ButtonText>
-        </Button>
-      )}
     </Box>
   );
 }

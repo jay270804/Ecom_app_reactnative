@@ -1,5 +1,4 @@
 import { HapticTab } from "@/app-example/components/HapticTab";
-import TabBarBackground from "@/app-example/components/ui/TabBarBackground";
 import { Header } from "@/components/ui/header";
 import { CustomTabBar } from "@/components/ui/tab-bar";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -34,15 +33,7 @@ export default function TabLayout() {
             fontWeight: "bold",
           },
           header: () => (
-            <Header
-              title="Home"
-              rightAction={{
-                label: "404",
-                onPress: () => router.push("/+not-found"),
-                variant: "outline",
-                action: "primary"
-              }}
-            />
+            <Header />
           ),
           tabBarIcon: ({ color }) => (
             <MaterialIcons size={30} color={color} name="home" />
