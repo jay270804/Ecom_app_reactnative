@@ -9,6 +9,7 @@ import TopicHeader from "@/components/ui/TopicHeader";
 import { useTheme } from "@/hooks/useTheme";
 import { useRouter } from "expo-router";
 import { FlatList, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const router = useRouter();
@@ -16,24 +17,26 @@ export default function Index() {
   const products = dummyProducts;
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Box>
-        <PromoCarousel promos={promoProducts} />
-        <TopicHeader title="Checkout Brands"/>
-        <BrandsCarousel brands={brands} />
-        <TopicHeader title="Products"/>
-        <FlatList
-          data={products}
-          renderItem={({item}) => <ProductCard product={item}/>}
-          numColumns={2}
-          horizontal={false}
-          contentContainerStyle={{ padding: 16 }}
-          columnWrapperStyle={{ justifyContent: 'space-between' }}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          scrollEnabled={false}
-        />
-      </Box>
-    </ScrollView>
+    <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        <Box>
+          <PromoCarousel promos={promoProducts} />
+          <TopicHeader title="Checkout Brands"/>
+          <BrandsCarousel brands={brands} />
+          <TopicHeader title="Products"/>
+          <FlatList
+            data={products}
+            renderItem={({item}) => <ProductCard product={item}/>}
+            numColumns={2}
+            horizontal={false}
+            contentContainerStyle={{ padding: 16 }}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item.id}
+            scrollEnabled={false}
+          />
+        </Box>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

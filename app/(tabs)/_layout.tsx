@@ -1,6 +1,6 @@
 import { HapticTab } from "@/app-example/components/HapticTab";
 import { Header } from "@/components/ui/header";
-import { CustomTabBar } from "@/components/ui/tab-bar";
+import { CustomTabBar } from "@/components/ui/tab-bar/CustomTabBar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
 import { Platform, useColorScheme } from "react-native";
@@ -22,8 +22,9 @@ export default function TabLayout() {
           },
           default: {},
         }),
+        headerShown: true,
       }}
-      tabBar={(props) => <CustomTabBar {...props} />}
+      tabBar={props => <CustomTabBar {...props} />}
     >
       <Tabs.Screen
         name="index"
