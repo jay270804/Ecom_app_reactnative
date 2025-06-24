@@ -1,7 +1,9 @@
 import { Box } from "@/components/ui/box";
 import { Image } from "@/components/ui/image";
 import { useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
+import { Dimensions } from "react-native";
+import Carousel from "react-native-reanimated-carousel";
 import { Pressable } from "./ui/pressable";
 
 export type Promo = {
@@ -21,36 +23,38 @@ const imageMap: Record<string, any> = {
   "@/assets/images/promo3.png": require("@/assets/images/promo3.png"),
 };
 
-export function PromoCarousel({ promos, intervalMs = 3000 }: PromoCarouselProps) {
-  const [index, setIndex] = useState(0);
-  const router = useRouter();
-  const intervalRef = useRef<number | null>(null);
+const { width: screenWidth } = Dimensions.get("window");
 
-  useEffect(() => {
-    if (promos.length === 0) return;
-    intervalRef.current = setInterval(() => {
-      setIndex((prev) => (prev + 1) % promos.length);
-    }, intervalMs);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [promos.length, intervalMs]);
+export function PromoCarousel({ promos, intervalMs = 3000 }: PromoCarouselProps) {
+  const router = useRouter();
 
   if (!promos.length) return null;
 
-  const handlePress = () => {
-    router.push(`/product/${promos[index].product_id}`);
+  const handlePress = (product_id: string) => {
+    router.push(`/product/${product_id}`);
   };
 
   return (
     <Box className="px-6 py-4">
-      <Pressable onPress={handlePress} className="w-full">
-        <Image
-          source={imageMap[promos[index].img]}
-          className="w-full h-40 rounded-xl object-cover"
-          alt="Promotion"
-        />
-      </Pressable>
+      <Carousel
+        width={screenWidth - 48} // px-6 on both sides (12*2=24px each side)
+        height={160}
+        autoPlay
+        autoPlayInterval={intervalMs}
+        data={promos}
+        scrollAnimationDuration={500}
+        renderItem={({ item }) => (
+          <Pressable onPress={() => handlePress(item.product_id)} className="w-full h-full">
+            <Image
+              source={imageMap[item.img]}
+              className="w-full h-full rounded-xl object-cover"
+              alt="Promotion"
+            />
+          </Pressable>
+        )}
+        style={{ borderRadius: 16, overflow: "hidden" }}
+        // loop // uncomment if you want infinite loop
+      />
     </Box>
   );
 }
