@@ -59,14 +59,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="cart"
+        name="wishlist"
         options={{
-          title: "Cart",
+          title: "Wishlist",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons size={30} color={color} name="shopping-cart" />
+            <MaterialIcons size={30} color={color} name="heart-broken" />
           ),
-        }}
-      />
+        }}/>
     </Tabs>
   );
 }

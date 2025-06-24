@@ -4,10 +4,12 @@ import { Input, InputField, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Pressable } from "../pressable";
+import { useRouter } from "expo-router";
 
 export function Header() {
   const insets = useSafeAreaInsets();
-
+  const router = useRouter()
   return (
     <Box
       className={`w-full flex-row items-center justify-between px-5 py-4 bg-transparent border-b-2 border-secondary-500`}
@@ -34,11 +36,15 @@ export function Header() {
           />
         </Input>
         {/* TODO: get a high definition svg */}
+        <Pressable
+        onPress={() => router.push('/cart')}
+        >
         <Image
           source={require("@/assets/images/cart_icon.png")}
           className="w-5 h-5"
           alt="cart_icon"
         />
+        </Pressable>
       </Box>
     </Box>
   );
