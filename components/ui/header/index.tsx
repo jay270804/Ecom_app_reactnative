@@ -4,14 +4,13 @@ import { Input, InputField, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-// import { SearchIcon } from '@/components/ui/icon'; // Uncomment if you have a vector SearchIcon
 
 export function Header() {
   const insets = useSafeAreaInsets();
 
   return (
     <Box
-      className={`w-full flex-row items-center justify-between px-5 py-4 bg-transparent`}
+      className={`w-full flex-row items-center justify-between px-5 py-4 bg-transparent border-b-2 border-secondary-500`}
       style={{ marginTop: insets.top }}
     >
       {/* Left: Brand */}
