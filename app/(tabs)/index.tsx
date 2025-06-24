@@ -1,13 +1,14 @@
+import { brands } from "@/assets/brands";
 import { dummyProducts } from "@/assets/products";
 import { promoProducts } from "@/assets/promo";
+import { BrandsCarousel } from "@/components/BrandsCarousel";
 import ProductCard from "@/components/ProductCard";
 import { PromoCarousel } from "@/components/PromoCarousel";
 import { Box } from "@/components/ui/box";
-import { Heading } from "@/components/ui/heading";
+import TopicHeader from "@/components/ui/TopicHeader";
 import { useTheme } from "@/hooks/useTheme";
 import { useRouter } from "expo-router";
 import { FlatList, ScrollView } from "react-native";
-import TopicHeader from "@/components/ui/TopicHeader";
 
 export default function Index() {
   const router = useRouter();
@@ -18,6 +19,8 @@ export default function Index() {
     <ScrollView showsVerticalScrollIndicator={false}>
       <Box>
         <PromoCarousel promos={promoProducts} />
+        <TopicHeader title="Checkout Brands"/>
+        <BrandsCarousel brands={brands} />
         <TopicHeader title="Products"/>
         <FlatList
           data={products}
