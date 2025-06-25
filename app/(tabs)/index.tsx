@@ -5,6 +5,7 @@ import { BrandsCarousel } from "@/components/BrandsCarousel";
 import ProductCard from "@/components/ProductCard";
 import { PromoCarousel } from "@/components/PromoCarousel";
 import { Box } from "@/components/ui/box";
+import { Header } from "@/components/ui/header";
 import TopicHeader from "@/components/ui/TopicHeader";
 import { useTheme } from "@/hooks/useTheme";
 import { useRouter } from "expo-router";
@@ -18,6 +19,7 @@ export default function Index() {
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
+      <Header />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
         <Box>
           <PromoCarousel promos={promoProducts} />

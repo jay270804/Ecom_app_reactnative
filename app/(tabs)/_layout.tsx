@@ -1,5 +1,4 @@
 import { HapticTab } from "@/app-example/components/HapticTab";
-import { Header } from "@/components/ui/header";
 import { CustomTabBar } from "@/components/ui/tab-bar/CustomTabBar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
@@ -22,7 +21,7 @@ export default function TabLayout() {
           },
           default: {},
         }),
-        headerShown: true,
+        headerShown: false,
       }}
       tabBar={props => <CustomTabBar {...props} />}
     >
@@ -33,9 +32,6 @@ export default function TabLayout() {
           headerTitleStyle: {
             fontWeight: "bold",
           },
-          header: () => (
-            <Header />
-          ),
           tabBarIcon: ({ color }) => (
             <MaterialIcons size={30} color={color} name="home" />
           ),
