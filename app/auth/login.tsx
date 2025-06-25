@@ -34,7 +34,7 @@ export default function Login() {
   return (
     <SafeAreaView
       edges={["top", "left", "right"]}
-      style={{ flex: 1, backgroundColor: "#f5f5f5" }}
+      style={{ flex: 1, backgroundColor: "transparent" }}
     >
       <RegisterHeader title="Login" />
       <Box className="flex-1 pt-4 gap-4">

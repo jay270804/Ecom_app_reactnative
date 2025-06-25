@@ -2,6 +2,7 @@ import { Box } from "@/components/ui/box";
 import { Image } from "@/components/ui/image";
 import { Input, InputField, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable } from "../pressable";
@@ -43,6 +44,24 @@ export function Header() {
           />
         </Pressable>
       </Box>
+    </Box>
+  );
+}
+
+export function ProductHeader({ onWishlistPress }: { onWishlistPress?: () => void }) {
+  const router = useRouter();
+  return (
+    <Box className="w-full flex-row items-center justify-between px-5 py-4 border-b-2 border-secondary-500 overflow-hidden h-[56px]">
+      {/* Back button */}
+      <Pressable onPress={() => router.back()} className="w-8 items-start justify-center">
+        <MaterialIcons name="arrow-back" size={28} color="#68686B" />
+      </Pressable>
+      {/* Centered Title */}
+      <Text className="text-primary-950 font-bold text-lg text-center flex-1">Product</Text>
+      {/* Wishlist icon */}
+      <Pressable onPress={onWishlistPress} className="w-8 items-end justify-center">
+        <MaterialIcons name="favorite-border" size={26} color="#68686B" />
+      </Pressable>
     </Box>
   );
 }

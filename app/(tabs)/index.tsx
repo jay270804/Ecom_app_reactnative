@@ -28,7 +28,12 @@ export default function Index() {
           <TopicHeader title="Products"/>
           <FlatList
             data={products}
-            renderItem={({item}) => <ProductCard product={item}/>}
+            renderItem={({item}) => (
+              <ProductCard
+                product={item}
+                onPress={() => router.push(`/product/${item.id}`)}
+              />
+            )}
             numColumns={2}
             horizontal={false}
             contentContainerStyle={{ padding: 16 }}

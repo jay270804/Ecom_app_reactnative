@@ -38,7 +38,7 @@ export default function Register() {
   return (
     <SafeAreaView
       edges={["top", "left", "right"]}
-      style={{ flex: 1, backgroundColor: "#f5f5f5" }}
+      style={{ flex: 1, backgroundColor: "transparent" }}
     >
       <RegisterHeader />
       <Box className="flex-1 pt-4 gap-4">
