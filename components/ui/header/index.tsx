@@ -18,21 +18,31 @@ export function Header() {
         Brand
       </Text>
       <Box className="w-2/3 flex flex-row items-center justify-between gap-4">
-        <Input className="flex-1 flex-row items-center bg-secondary-500 rounded-2xl h-9 mx-2 px-3 border-2 border-secondary-700">
-          <InputSlot className="pl-0 pr-2">
-            {/* If you have a vector icon, use: <InputIcon as={SearchIcon}/> */}
-            <Image
-              source={require("@/assets/images/search_icon.png")}
-              className="w-5 h-5"
-              alt="search_icon"
+        <Box className="relative flex-1 h-9">
+          {/* The Input (search bar) */}
+          <Input className="flex-1 flex-row items-center bg-secondary-500 rounded-2xl mx-2 px-3 border-2 border-secondary-700">
+            <InputSlot className="pl-0 pr-2">
+              <Image
+                source={require("@/assets/images/search_icon.png")}
+                className="w-5 h-5"
+                alt="search_icon"
+              />
+            </InputSlot>
+            <InputField
+              placeholder="Search"
+              type="text"
+              className="text-secondary-800 text-[12px] font-light"
+              editable={false}
+              pointerEvents="none"
             />
-          </InputSlot>
-          <InputField
-            placeholder="Search"
-            type="text"
-            className="text-secondary-800 text-[12px] font-light"
+          </Input>
+          {/* The overlay Pressable */}
+          <Pressable
+            className="absolute left-0 top-0 right-0 bottom-0"
+            onPress={() => router.push('/search')}
+            style={{ backgroundColor: 'transparent' }}
           />
-        </Input>
+        </Box>
         {/* TODO: get a high definition svg */}
         <Pressable
           onPress={() => router.push('/cart')}
@@ -62,6 +72,49 @@ export function ProductHeader({ onWishlistPress }: { onWishlistPress?: () => voi
       <Pressable onPress={onWishlistPress} className="w-8 items-end justify-center">
         <MaterialIcons name="favorite-border" size={26} color="#68686B" />
       </Pressable>
+    </Box>
+  );
+}
+
+export function SearchHeader({
+  query,
+  setQuery,
+  inputRef,
+}: {
+  query: string;
+  setQuery: (q: string) => void;
+  inputRef?: (ref: any) => void;
+}) {
+  const router = useRouter();
+  return (
+    <Box className="w-full flex-row items-center justify-between px-5 py-4 border-b-2 border-secondary-500 h-[56px]">
+      {/* Back arrow */}
+      <Pressable onPress={() => router.back()} className="w-8 items-start justify-center">
+        <MaterialIcons name="arrow-back" size={28} color="#68686B" />
+      </Pressable>
+      {/* Centered Search Input */}
+      <Box className="flex-1 mx-6">
+        <Input className="flex-row items-center bg-secondary-500 rounded-2xl h-9 px-4 border-2 border-secondary-700">
+          <InputSlot className="pl-0 pr-2">
+            <Image
+              source={require("@/assets/images/search_icon.png")}
+              className="w-5 h-5"
+              alt="search_icon"
+            />
+          </InputSlot>
+          <InputField
+            ref={inputRef}
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search"
+            className="text-secondary-800 text-[12px] font-light"
+            returnKeyType="search"
+            autoFocus
+          />
+        </Input>
+      </Box>
+      {/* Empty box for centering */}
+      <Box className="w-8" />
     </Box>
   );
 }
