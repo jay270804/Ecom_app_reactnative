@@ -5,7 +5,7 @@ export default function Cart() {
 
   return(
     <Box className="flex-1 justify-center items-center">
-        <Text>This is Cart Screen</Text>
+        <Text>This is Checkout Screen</Text>
     </Box>
   )
 }
