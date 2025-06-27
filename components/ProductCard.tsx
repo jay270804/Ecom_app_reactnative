@@ -1,3 +1,5 @@
+import { useCartStore } from "@/store/slices/cartSlice";
+import { useWishlistStore } from "@/store/slices/wishlistSlice";
 import { Product } from "@/store/types";
 import { Box } from "./ui/box";
 import { Button, ButtonText } from "./ui/button";
@@ -14,11 +16,16 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({product, onPress}: ProductCardProps){
+    const { addToCart, isInCart } = useCartStore();
+    const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlistStore();
+    const inCart = isInCart(product.id);
+    const wishlisted = isWishlisted(product.id);
     const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
 
     return(
         <Pressable onPress={onPress} className="flex-1">
-          <Card className="p-3 rounded-lg flex-1 mx-1 my-2 border border-outline-100">
+          <Card className="p-3 rounded-lg flex-1 mx-1 my-2 justify-between border border-outline-100">
+            <Box>
             <Image
               source={product.image}
               className="mb-4 h-[160px] w-full rounded-md aspect-[4/3] object-fill"
@@ -56,18 +63,25 @@ export default function ProductCard({product, onPress}: ProductCardProps){
                 )}
               </Box>
             </VStack>
+            </Box>
             <Box className="flex-col">
-              <Button className="px-3 py-2 mb-2 bg-primary-600" onPress={() => { /* TODO: add button states and connect them with cart */ }}>
-                <ButtonText size="xs" className="text-typography-0">Add to cart</ButtonText>
+              <Button
+                className="px-3 py-2 mb-2 bg-primary-600"
+                onPress={() => addToCart(product)}
+                disabled={inCart}
+              >
+                <ButtonText size="xs" className="text-typography-0">
+                  {inCart ? "Added" : "Add to cart"}
+                </ButtonText>
               </Button>
               <Button
-                variant="outline"
+                variant={wishlisted ? "solid" : "outline"}
                 action="default"
                 className="px-3 py-2 border-outline-300"
-                onPress={() => { /* TODO: add button states and connect them with wishlist */ }}
+                onPress={() => wishlisted ? removeFromWishlist(product.id) : addToWishlist(product.id)}
               >
-                <ButtonText size="xs" className="text-typography-700">
-                  Wishlist
+                <ButtonText size="xs" className={wishlisted ? "text-tertiary-600" : "text-typography-700"}>
+                  {wishlisted ? "Wishlisted" : "Wishlist"}
                 </ButtonText>
               </Button>
             </Box>

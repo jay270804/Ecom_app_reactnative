@@ -6,9 +6,11 @@ import { Image } from "@/components/ui/image";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { useCartStore } from "@/store/slices/cartSlice";
+import { useWishlistStore } from "@/store/slices/wishlistSlice";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { Dimensions } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
@@ -17,10 +19,18 @@ export default function ProductScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const product = dummyProducts.find((p) => p.id === id) || dummyProducts[0];
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [cartQty, setCartQty] = useState(0);
   const { width: screenWidth } = Dimensions.get("window");
   const insets = useSafeAreaInsets();
+
+  // Zustand stores
+  const { addToCart, removeFromCart, updateQuantity, items: cartItems, isInCart } = useCartStore();
+  const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlistStore();
+
+  // Cart state for this product
+  const cartItem = cartItems.find((item) => item.product.id === product.id);
+  const cartQty = cartItem ? cartItem.quantity : 0;
+  const inCart = !!cartItem;
+  const wishlisted = isWishlisted(product.id);
 
   // For now, use the same image 3 times
   const images = [product.image, product.image, product.image];
@@ -30,7 +40,12 @@ export default function ProductScreen() {
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
       {/* Consistent Product Header */}
-      <ProductHeader onWishlistPress={() => { /* TODO: connect to wishlist */ }} />
+      <ProductHeader
+        onWishlistPress={() =>
+          wishlisted ? removeFromWishlist(product.id) : addToWishlist(product.id)
+        }
+        wishlisted={wishlisted}
+      />
       {/* Main Content Box */}
       <Box className="flex-1 items-center justify-start px-0 pt-4">
         <Box className="w-full max-w-md rounded-lg px-6 py-2 items-center">
@@ -40,7 +55,7 @@ export default function ProductScreen() {
               width={screenWidth - 48}
               height={180}
               data={images}
-              onSnapToItem={setActiveIndex}
+              onSnapToItem={() => {}}
               renderItem={({ item }) => (
                 <Image
                   source={item}
@@ -56,7 +71,7 @@ export default function ProductScreen() {
               {images.map((_, i) => (
                 <Box
                   key={i}
-                  className={`w-2 h-2 mx-1 rounded-full ${i === activeIndex ? "bg-tertiary-500" : "bg-outline-200"}`}
+                  className={`w-2 h-2 mx-1 rounded-full ${i === 0 ? "bg-tertiary-500" : "bg-outline-200"}`}
                 />
               ))}
             </Box>
@@ -103,7 +118,7 @@ export default function ProductScreen() {
         {cartQty === 0 ? (
           <Pressable
             className="flex-1 bg-tertiary-500 rounded-full py-3 mx-2 items-center justify-center"
-            onPress={() => setCartQty(1)}
+            onPress={() => addToCart(product)}
           >
             <Text className="text-typography-0 text-base font-bold">Add to Cart</Text>
           </Pressable>
@@ -111,21 +126,21 @@ export default function ProductScreen() {
           <>
             <Pressable
               className="bg-background-0 rounded-full w-1/4 py-3 items-center justify-center mx-2"
-              onPress={() => setCartQty(0)}
+              onPress={() => removeFromCart(product.id)}
             >
               <MaterialIcons name="delete-outline" size={22} color="#68686B" />
             </Pressable>
             <Box className="flex-row flex-1 items-center justify-between py-2 px-4 border-2 rounded-full border-outline-800 mx-2">
               <Pressable
                 className="w-8 rounded-full items-center justify-center"
-                onPress={() => setCartQty((q) => Math.max(1, q - 1))}
+                onPress={() => updateQuantity(product.id, Math.max(1, cartQty - 1))}
               >
                 <Text className="text-xl text-typography-900">-</Text>
               </Pressable>
               <Text className="mx-2 text-lg font-semibold text-typography-900">{cartQty}</Text>
               <Pressable
                 className="w-8 rounded-full items-center justify-center"
-                onPress={() => setCartQty((q) => q + 1)}
+                onPress={() => updateQuantity(product.id, cartQty + 1)}
               >
                 <Text className="text-xl text-typography-900">+</Text>
               </Pressable>

@@ -58,7 +58,7 @@ export function Header() {
   );
 }
 
-export function ProductHeader({ onWishlistPress }: { onWishlistPress?: () => void }) {
+export function ProductHeader({ onWishlistPress, wishlisted }: { onWishlistPress?: () => void; wishlisted?: boolean }) {
   const router = useRouter();
   return (
     <Box className="w-full flex-row items-center justify-between px-5 py-4 border-b-2 border-secondary-500 overflow-hidden h-[56px]">
@@ -70,7 +70,11 @@ export function ProductHeader({ onWishlistPress }: { onWishlistPress?: () => voi
       <Text className="text-primary-950 font-bold text-lg text-center flex-1">Product</Text>
       {/* Wishlist icon */}
       <Pressable onPress={onWishlistPress} className="w-8 items-end justify-center">
-        <MaterialIcons name="favorite-border" size={26} color="#68686B" />
+        <MaterialIcons
+          name={wishlisted ? "favorite" : "favorite-border"}
+          size={26}
+          color={wishlisted ? "#FB9D4B" : "#68686B"}
+        />
       </Pressable>
     </Box>
   );

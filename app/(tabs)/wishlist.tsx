@@ -1,14 +1,14 @@
 import { dummyProducts } from "@/assets/products";
 import ProductCatalogue from "@/components/ProductCatalogue";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
+import { useWishlistStore } from "@/store/slices/wishlistSlice";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Wishlist() {
   const router = useRouter();
-  // Dummy wishlisted product IDs
-  const [wishlisted] = useState(["1", "3", "5"]); // Example: products 1, 3, 5 are wishlisted
+  const wishlisted = useWishlistStore((state) => state.items);
   const products = dummyProducts.filter((p) => wishlisted.includes(p.id));
 
   return (
