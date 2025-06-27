@@ -18,53 +18,57 @@ interface ProductCardProps {
 export default function ProductCard({product, onPress}: ProductCardProps){
     const { addToCart, isInCart } = useCartStore();
     const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlistStore();
-    const inCart = isInCart(product.id);
-    const wishlisted = isWishlisted(product.id);
-    const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
+    const inCart = isInCart(product?.id ?? "");
+    const wishlisted = isWishlisted(product?.id ?? "");
+    const hasDiscount = !!product?.discountPercentage && product.discountPercentage > 0 && product.discountedPrice;
+
+    // Defensive fallback values
+    const name = product?.name || "Unnamed Product";
+    const price = product?.price != null ? product.price : "-";
+    const discountedPrice = product?.discountedPrice != null ? product.discountedPrice : price;
+    const image = product?.image || undefined;
 
     return(
         <Pressable onPress={onPress} className="flex-1">
-          <Card className="p-3 rounded-lg flex-1 mx-1 my-2 justify-between border border-outline-100">
-            <Box>
-            <Image
-              source={product.image}
-              className="mb-4 h-[160px] w-full rounded-md aspect-[4/3] object-fill"
-              alt={`${product.name}-image`}
-            />
-            <VStack className="mb-4">
-              <Heading size="sm" className="mb-2">
-                {product.name}
-              </Heading>
-              {/* <Text size="xs" className="line-clamp-2">{product.description}</Text> */}
-
-              {/* Price Section */}
-              <Box className="mt-2">
-                {hasDiscount ? (
-                  <VStack className="gap-1">
-                    {/* Discount Badge */}
-                    <Box className="self-start">
-                      <Text size="xs" className="bg-tertiary-500 text-typography-0 px-2 py-1 rounded-md">
-                        -{product.discountPercentage}% OFF
+          <Card className="p-3 rounded-lg flex-1 mx-1 my-2 flex flex-col justify-between border border-outline-100 min-h-[260px]">
+            <Box className="flex-1">
+              <Image
+                source={image}
+                className="mb-4 h-[160px] w-full rounded-md aspect-[4/3] object-fill"
+                alt={`${name}-image`}
+              />
+              <VStack className="mb-4">
+                <Heading size="sm" className="mb-2">
+                  {name}
+                </Heading>
+                {/* Price Section */}
+                <Box className="mt-2">
+                  {hasDiscount ? (
+                    <VStack className="gap-1">
+                      {/* Discount Badge */}
+                      <Box className="self-start">
+                        <Text size="xs" className="bg-tertiary-500 text-typography-0 px-2 py-1 rounded-md">
+                          -{product.discountPercentage}% OFF
+                        </Text>
+                      </Box>
+                      {/* Original Price (Strikethrough) */}
+                      <Text size="xs" className="line-clamp-2" strikeThrough>
+                        Rs. {price}/-
                       </Text>
-                    </Box>
-                    {/* Original Price (Strikethrough) */}
-                    <Text size="xs" className="line-clamp-2" strikeThrough>
-                      Rs. {product.price}/-
+                      {/* Discounted Price */}
+                      <Text size="sm" className="text-tertiary-600 font-semibold">
+                        Rs. {discountedPrice}/-
+                      </Text>
+                    </VStack>
+                  ) : (
+                    <Text size="sm" className="font-semibold">
+                      Rs. {price}/-
                     </Text>
-                    {/* Discounted Price */}
-                    <Text size="sm" className="text-tertiary-600 font-semibold">
-                      Rs. {product.discountedPrice}/-
-                    </Text>
-                  </VStack>
-                ) : (
-                  <Text size="sm" className="font-semibold">
-                    Rs. {product.price}/-
-                  </Text>
-                )}
-              </Box>
-            </VStack>
+                  )}
+                </Box>
+              </VStack>
             </Box>
-            <Box className="flex-col">
+            <Box className="flex flex-col">
               <Button
                 className="px-3 py-2 mb-2 bg-primary-600"
                 onPress={() => addToCart(product)}
