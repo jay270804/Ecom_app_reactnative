@@ -5,30 +5,114 @@ import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
 import { Image } from "@/components/ui/image";
 import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
+import { Toast, ToastDescription, ToastTitle, useToast } from "@/components/ui/toast";
 import TopicHeader from "@/components/ui/TopicHeader";
+import { useAuthStore } from "@/store/slices/authSlice";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Login() {
   const router = useRouter();
+  const { login, isAuthenticated, isLoading } = useAuthStore();
+  const toast = useToast();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
   const [focus, setFocus] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Redirect to home if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/");
+    }
+  }, [isAuthenticated, router]);
 
   const handleChange = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
+    // Clear error when user starts typing
+    if (error) setError(null);
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    // Simulate API call
-    await new Promise((res) => setTimeout(res, 1200));
-    setLoading(false);
-    router.replace("/");
+    // Validate form
+    if (!form.email || !form.password) {
+      setError("Please fill in all fields");
+      toast.show({
+        render: ({ id }) => {
+          return (
+            <Toast nativeID={id} action="error" variant="solid">
+              <ToastTitle>Error</ToastTitle>
+              <ToastDescription>Please fill in all fields</ToastDescription>
+            </Toast>
+          );
+        },
+      });
+      return;
+    }
+
+    if (!form.email.includes("@")) {
+      setError("Please enter a valid email address");
+      toast.show({
+        render: ({ id }) => {
+          return (
+            <Toast nativeID={id} action="error" variant="solid">
+              <ToastTitle>Error</ToastTitle>
+              <ToastDescription>Please enter a valid email address</ToastDescription>
+            </Toast>
+          );
+        },
+      });
+      return;
+    }
+
+    try {
+      const result = await login({
+        email: form.email,
+        password: form.password,
+      });
+
+      if (result.success) {
+        // Login successful, user will be redirected by useEffect
+        setError(null);
+        toast.show({
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="success" variant="solid">
+                <ToastTitle>Success</ToastTitle>
+                <ToastDescription>Login successful!</ToastDescription>
+              </Toast>
+            );
+          },
+        });
+      } else {
+        setError(result.error || "Login failed");
+        toast.show({
+          render: ({ id }) => {
+            return (
+              <Toast nativeID={id} action="error" variant="solid">
+                <ToastTitle>Error</ToastTitle>
+                <ToastDescription>{result.error || "Login failed"}</ToastDescription>
+              </Toast>
+            );
+          },
+        });
+      }
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred");
+      toast.show({
+        render: ({ id }) => {
+          return (
+            <Toast nativeID={id} action="error" variant="solid">
+              <ToastTitle>Error</ToastTitle>
+              <ToastDescription>{err.message || "An unexpected error occurred"}</ToastDescription>
+            </Toast>
+          );
+        },
+      });
+    }
   };
 
   return (
@@ -41,6 +125,13 @@ export default function Login() {
         <TopicHeader title="Welcome Back" />
         <Box className="flex-1 items-center justify-start px-6 py-2 ">
           <Card className="w-full max-w-md bg-background-0 p-4 rounded-lg">
+            {/* Error Message */}
+            {error && (
+              <Box className="mb-4 p-3 bg-red-50 border border-red-200 rounded">
+                <Text className="text-red-600 text-sm">{error}</Text>
+              </Box>
+            )}
+
             {/* Email */}
             <Box className="mb-2">
               <Text
@@ -67,9 +158,11 @@ export default function Login() {
                   autoCapitalize="none"
                   onFocus={() => setFocus("email")}
                   onBlur={() => setFocus(null)}
+                  editable={!isLoading}
                 />
               </Input>
             </Box>
+
             {/* Password */}
             <Box className="mb-2">
               <Text
@@ -95,29 +188,43 @@ export default function Login() {
                   secureTextEntry
                   onFocus={() => setFocus("password")}
                   onBlur={() => setFocus(null)}
+                  editable={!isLoading}
                 />
               </Input>
             </Box>
+
             {/* Sign in Button */}
             <Button
               className="bg-tertiary-500 rounded mt-2 mb-1"
               onPress={handleSubmit}
-              isDisabled={loading}
+              isDisabled={isLoading}
             >
               <ButtonText className="text-typography-0 font-semibold">
-                Sign in
+                {isLoading ? "Signing in..." : "Sign in"}
               </ButtonText>
             </Button>
+
             {/* Forgot Password Link */}
             <Box className="flex-row justify-center my-2">
               <Text
                 className="text-xs text-tertiary-500 font-semibold "
-                onPress={() => {}}
+                onPress={() => {
+                  toast.show({
+                    render: ({ id }) => {
+                      return (
+                        <Toast nativeID={id} action="info" variant="solid">
+                          <ToastTitle>Coming Soon</ToastTitle>
+                          <ToastDescription>Password reset functionality will be available soon!</ToastDescription>
+                        </Toast>
+                      );
+                    },
+                  });
+                }}
               >
-                {/* TODO: add the redirection to reset pass screen */}
                 Forgot Password ?
               </Text>
             </Box>
+
             {/* Register Link */}
             <Box className="flex-row justify-center mt-2">
               <Text className="text-xs text-typography-700">
@@ -132,6 +239,7 @@ export default function Login() {
             </Box>
           </Card>
         </Box>
+
         {/* Illustration at the bottom */}
         <Box className="flex items-center justify-end  mt-4">
           <Image

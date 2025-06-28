@@ -5,8 +5,10 @@ import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
 import { Image } from "@/components/ui/image";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
+import { Toast, ToastDescription, ToastTitle, useToast } from "@/components/ui/toast";
 import { VStack } from "@/components/ui/vstack";
-import { useCartStore } from "@/store/slices/cartSlice";
+import { useAuthStore } from "@/store/slices/authSlice";
+import { CartItem, useCartStore } from "@/store/slices/cartSlice";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -24,13 +26,15 @@ const initialCart = [
 ];
 
 export default function Cart() {
-  const { items: cart, updateQuantity, removeFromCart } = useCartStore();
   const router = useRouter();
+  const toast = useToast();
+  const { isAuthenticated } = useAuthStore();
+  const { items: cart, removeFromCart, updateQuantity } = useCartStore();
   const insets = useSafeAreaInsets();
 
   // Pricing calculations
   const subtotalRaw = cart.reduce(
-    (sum, item) =>
+    (sum: number, item: CartItem) =>
       sum +
       (item.product.discountedPrice ?? item.product.price) * item.quantity,
     0
@@ -44,18 +48,22 @@ export default function Cart() {
   const handleRemove = (idx: number) => {
     const product = cart[idx]?.product;
     if (!product) return;
-    Alert.alert(
-      "Remove Item",
-      `Are you sure you want to remove \"${product.name}\" from the cart?`,
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Remove",
-          style: "destructive",
-          onPress: () => removeFromCart(product.id),
-        },
-      ]
-    );
+
+    toast.show({
+      render: ({ id }) => {
+        return (
+          <Toast nativeID={id} action="warning" variant="solid">
+            <ToastTitle>Remove Item</ToastTitle>
+            <ToastDescription>
+              Are you sure you want to remove "{product.name}" from the cart?
+            </ToastDescription>
+          </Toast>
+        );
+      },
+    });
+
+    // For now, we'll remove directly. In a real app, you might want a confirmation dialog
+    removeFromCart(product.id);
   };
 
   // Quantity controls
@@ -63,6 +71,31 @@ export default function Cart() {
     const product = cart[idx]?.product;
     if (!product) return;
     updateQuantity(product.id, newQty);
+  };
+
+  // Handle checkout with authentication check
+  const handleCheckout = () => {
+    if (!isAuthenticated) {
+      Alert.alert(
+        "Authentication Required",
+        "Please login or register to complete your order.",
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Login",
+            onPress: () => router.push("/auth/login")
+          },
+          {
+            text: "Register",
+            onPress: () => router.push("/auth/register")
+          },
+        ]
+      );
+      return;
+    }
+
+    // Proceed to checkout if authenticated
+    router.push("/checkout");
   };
 
   const isEmpty = cart.length === 0;
@@ -82,7 +115,7 @@ export default function Cart() {
                 <Text className="text-lg font-semibold mb-4">Cart is empty</Text>
               </Box>
             ) : (
-              cart.map((item, idx) => (
+              cart.map((item: CartItem, idx: number) => (
                 <Card
                   key={item.product.id}
                   className="flex-row items-center bg-background-0 shadow-md rounded-xl px-4 py-4"
@@ -189,7 +222,7 @@ export default function Cart() {
         >
           <Pressable
             className="flex-1 bg-tertiary-500 rounded-full py-3 mx-2 items-center justify-center"
-            onPress={() => isEmpty ? router.push("/") : router.push("/checkout")}
+            onPress={() => isEmpty ? router.push("/") : handleCheckout()}
           >
             <Text className="text-typography-0 text-base font-bold">
               {isEmpty ? "Browse Products" : "Place Order"}
