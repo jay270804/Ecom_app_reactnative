@@ -119,6 +119,16 @@ export const dummyProducts: Product[] = [
     image: require('./images/power-bank.jpg'),
     discountPercentage: 14,
     discountedPrice: calculateDiscountedPrice(45.99, 14)
+  },
+  {
+    id: '13',
+    name: 'iPhone 14 Pro Earpiece Speaker',
+    price: 22,
+    description: 'Original quality earpiece speaker for fixing audio issues during calls on the iPhone 14 Pro.',
+    summary: 'Replacement earpiece speaker for iPhone 14 Pro.',
+    image: require('./images/headphones.jpg'),
+    discountPercentage: 10,
+    discountedPrice: calculateDiscountedPrice(22, 10)
   }
 ];
 

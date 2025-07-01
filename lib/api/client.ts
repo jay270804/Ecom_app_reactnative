@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { ANDROID_BASE_URL } from '../constant';
 
 // API Configuration
-const API_BASE_URL = 'http://192.168.120.74:8000'; // For physical device
+const API_BASE_URL = ANDROID_BASE_URL; // For physical device
 // const API_BASE_URL = 'http://10.0.2.2:8000'; // For Android emulator
 // const API_BASE_URL = 'http://localhost:8000'; // For iOS simulator
 

@@ -1,6 +1,9 @@
+import { ANDROID_BASE_URL } from "@/lib/constant";
+import { useAuthStore } from "@/store/slices/authSlice";
 import { useCartStore } from "@/store/slices/cartSlice";
 import { useWishlistStore } from "@/store/slices/wishlistSlice";
 import { Product } from "@/store/types";
+import { useRouter } from "expo-router";
 import { Box } from "./ui/box";
 import { Button, ButtonText } from "./ui/button";
 import { Card } from "./ui/card";
@@ -18,6 +21,9 @@ interface ProductCardProps {
 export default function ProductCard({product, onPress}: ProductCardProps){
     const { addToCart, isInCart } = useCartStore();
     const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlistStore();
+    const { isAuthenticated } = useAuthStore();
+    const router = useRouter();
+
     const inCart = isInCart(product?.id ?? "");
     const wishlisted = isWishlisted(product?.id ?? "");
     const hasDiscount = !!product?.discountPercentage && product.discountPercentage > 0 && product.discountedPrice;
@@ -26,7 +32,17 @@ export default function ProductCard({product, onPress}: ProductCardProps){
     const name = product?.name || "Unnamed Product";
     const price = product?.price != null ? product.price : "-";
     const discountedPrice = product?.discountedPrice != null ? product.discountedPrice : price;
-    const image = product?.image || undefined;
+    const image = product?.coverImage
+        ? { uri: `${ANDROID_BASE_URL}${product.coverImage}` }
+        : `${ANDROID_BASE_URL}/uploads/products/e4fedf3a-714c-43e5-8d18-e229fd6483b8_original.jpg`;
+
+    const handleWishlistPress = () => {
+        if (!isAuthenticated) {
+            router.push('/auth/login');
+        } else {
+            wishlisted ? removeFromWishlist(product.id) : addToWishlist(product.id);
+        }
+    };
 
     return(
         <Pressable onPress={onPress} className="flex-1">
@@ -82,7 +98,7 @@ export default function ProductCard({product, onPress}: ProductCardProps){
                 variant={wishlisted ? "solid" : "outline"}
                 action="default"
                 className="px-3 py-2 border-outline-300"
-                onPress={() => wishlisted ? removeFromWishlist(product.id) : addToWishlist(product.id)}
+                onPress={handleWishlistPress}
               >
                 <ButtonText size="xs" className={wishlisted ? "text-tertiary-600" : "text-typography-700"}>
                   {wishlisted ? "Wishlisted" : "Wishlist"}

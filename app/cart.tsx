@@ -1,4 +1,3 @@
-import { dummyProducts } from "@/assets/products";
 import { Box } from "@/components/ui/box";
 import { Card } from "@/components/ui/card";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
@@ -7,6 +6,8 @@ import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { Toast, ToastDescription, ToastTitle, useToast } from "@/components/ui/toast";
 import { VStack } from "@/components/ui/vstack";
+import { ANDROID_BASE_URL } from "@/lib/constant";
+import { useProducts } from "@/lib/query/hooks";
 import { useAuthStore } from "@/store/slices/authSlice";
 import { CartItem, useCartStore } from "@/store/slices/cartSlice";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -18,19 +19,13 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-// Dummy cart items: 3 distinct products with different quantities
-const initialCart = [
-  { product: dummyProducts[0], quantity: 2 },
-  { product: dummyProducts[1], quantity: 1 },
-  { product: dummyProducts[2], quantity: 3 },
-];
-
 export default function Cart() {
   const router = useRouter();
   const toast = useToast();
   const { isAuthenticated } = useAuthStore();
   const { items: cart, removeFromCart, updateQuantity } = useCartStore();
   const insets = useSafeAreaInsets();
+  const { data: productsData, isLoading: isProductsLoading, isError: isProductsError } = useProducts();
 
   // Pricing calculations
   const subtotalRaw = cart.reduce(
@@ -122,7 +117,11 @@ export default function Cart() {
                 >
                   {/* Product Image */}
                   <Image
-                    source={item.product.image}
+                    source={
+                      item.product.coverImage
+                        ? { uri: `${ANDROID_BASE_URL}${item.product.coverImage}` }
+                        : { uri: `${ANDROID_BASE_URL}/uploads/products/e4fedf3a-714c-43e5-8d18-e229fd6483b8_original.jpg` }
+                    }
                     size="lg"
                     className="rounded-md mr-3 bg-background-0"
                     alt={item.product.name}
@@ -150,11 +149,11 @@ export default function Cart() {
                         Rs. {item.product.discountedPrice ?? item.product.price}/-
                       </Text>
                       {/* Quantity Controls - match [id].tsx style */}
-                      <Box className="flex-row items-center  py-1 px-4 gap-3
+                      <Box className="flex-row items-center  py-1 px-2 gap-1
                     border border-tertiary-700 rounded-full">
                         <Pressable
                           onPress={() => updateQty(idx, item.quantity - 1)}
-                          className="rounded-full items-center justify-center"
+                          className="rounded-full items-center justify-center w-9"
                         >
                           <Text className="text-xl text-tertiary-900">-</Text>
                         </Pressable>
@@ -163,7 +162,7 @@ export default function Cart() {
                         </Text>
                         <Pressable
                           onPress={() => updateQty(idx, item.quantity + 1)}
-                          className="rounded-full items-center justify-center"
+                          className="rounded-full items-center justify-center w-9"
                         >
                           <Text className="text-xl text-tertiary-900">+</Text>
                         </Pressable>

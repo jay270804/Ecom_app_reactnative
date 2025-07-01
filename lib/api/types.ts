@@ -15,7 +15,7 @@ export interface PaginationInfo {
 }
 
 export interface PaginatedResponse<T> {
-  data: T[];
+  products: T[];
   pagination: PaginationInfo;
 }
 

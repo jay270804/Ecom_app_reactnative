@@ -9,13 +9,16 @@ export interface User {
 }
 
 export interface Product {
-  id: string;
+  id: string; // mapped from _id
   name: string;
-  price: number;
   description: string;
-  image: any; // React Native ImageSourcePropType
-  discountPercentage?: number; // Optional discount percentage (0-100)
-  discountedPrice?: number; // Calculated discounted price
+  coverImage: string; // URL to main image
+  images: string[]; // URLs to additional images
+  price: number;
+  discountPercentage?: number;
+  discountedPrice?: number;
+  stockUnit: number;
+  tags?: string[];
 }
 
 export interface CartItem {

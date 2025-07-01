@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { authService, brandService, categoryService, productService } from '../api/services';
 import {
-    LoginRequest,
-    ProductFilters,
-    ProfileUpdateRequest,
-    RegisterRequest,
+  LoginRequest,
+  ProductFilters,
+  ProfileUpdateRequest,
+  RegisterRequest,
 } from '../api/types';
 import { queryKeys } from './queryClient';
 
@@ -87,7 +87,22 @@ export const useUpdateProfile = () => {
 export const useProducts = (filters?: ProductFilters) => {
   return useQuery({
     queryKey: queryKeys.products.all(filters),
-    queryFn: () => productService.getAll(filters),
+    queryFn: async () => {
+      const apiRes = await productService.getAll(filters);
+      // The products array is in apiRes.data.products
+      return (apiRes.data.products || []).map((p: any) => ({
+        id: p._id,
+        name: p.name,
+        description: p.description,
+        coverImage: p.coverImage,
+        images: p.images,
+        price: p.price,
+        discountPercentage: p.discountPercentage,
+        discountedPrice: p.discountedPrice,
+        stockUnit: p.stockUnit,
+        tags: p.tags,
+      }));
+    },
     staleTime: 1000 * 60 * 2, // 2 minutes
   });
 };
@@ -95,7 +110,25 @@ export const useProducts = (filters?: ProductFilters) => {
 export const useProduct = (id: string) => {
   return useQuery({
     queryKey: queryKeys.products.byId(id),
-    queryFn: () => productService.getById(id),
+    queryFn: async () => {
+      const apiRes = await productService.getById(id);
+      const p = apiRes.data;
+      return {
+        ...apiRes,
+        data: {
+          id: p._id,
+          name: p.name,
+          description: p.description,
+          coverImage: p.coverImage,
+          images: p.images,
+          price: p.price,
+          discountPercentage: p.discountPercentage,
+          discountedPrice: p.discountedPrice,
+          stockUnit: p.stockUnit,
+          tags: p.tags,
+        },
+      };
+    },
     enabled: !!id,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });

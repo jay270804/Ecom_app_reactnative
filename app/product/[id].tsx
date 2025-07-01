@@ -1,24 +1,24 @@
-import { dummyProducts } from "@/assets/products";
+import ProductCarousel from "@/components/ProductCarousel";
 import { Box } from "@/components/ui/box";
 import { Card } from "@/components/ui/card";
 import { ProductHeader } from "@/components/ui/header";
-import { Image } from "@/components/ui/image";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
-import { VStack } from "@/components/ui/vstack";
+import { ANDROID_BASE_URL } from "@/lib/constant";
+import { useProduct } from "@/lib/query/hooks";
 import { useCartStore } from "@/store/slices/cartSlice";
 import { useWishlistStore } from "@/store/slices/wishlistSlice";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { Dimensions } from "react-native";
-import Carousel from "react-native-reanimated-carousel";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ProductScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const product = dummyProducts.find((p) => p.id === id) || dummyProducts[0];
+  const { data, isLoading, isError, error } = useProduct(id ? String(id) : '');
+  const product = data?.data;
   const { width: screenWidth } = Dimensions.get("window");
   const insets = useSafeAreaInsets();
 
@@ -27,15 +27,26 @@ export default function ProductScreen() {
   const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlistStore();
 
   // Cart state for this product
-  const cartItem = cartItems.find((item) => item.product.id === product.id);
+  const cartItem = cartItems.find((item) => item.product.id === product?.id);
   const cartQty = cartItem ? cartItem.quantity : 0;
   const inCart = !!cartItem;
-  const wishlisted = isWishlisted(product.id);
+  const wishlisted = product?.id ? isWishlisted(product.id) : false;
 
-  // For now, use the same image 3 times
-  const images = [product.image, product.image, product.image];
+  // Use coverImage as the first image, then the rest from images[]
+  const images = product
+    ? [product.coverImage, ...(product.images || [])]
+        .filter((img): img is string => typeof img === "string")
+        .map(img => `${ANDROID_BASE_URL}${img}`)
+    : [];
 
-  const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
+  const hasDiscount = product?.discountPercentage && product.discountPercentage > 0;
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+  if (isError || !product) {
+    return <Text>Error loading product: {error?.message || 'Not found'}</Text>;
+  }
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
@@ -50,32 +61,7 @@ export default function ProductScreen() {
       <Box className="flex-1 items-center justify-start px-0 pt-4">
         <Box className="w-full max-w-md rounded-lg px-6 py-2 items-center">
           {/* Product Image Carousel */}
-          <VStack className="w-full items-center">
-            <Carousel
-              width={screenWidth - 48}
-              height={180}
-              data={images}
-              onSnapToItem={() => {}}
-              renderItem={({ item }) => (
-                <Image
-                  source={item}
-                  className="w-full h-full rounded-xl object-cover"
-                  alt={product.name}
-                />
-              )}
-              style={{ borderRadius: 16, overflow: "hidden" }}
-              loop={false}
-            />
-            {/* Dots */}
-            <Box className="flex-row justify-center mt-2">
-              {images.map((_, i) => (
-                <Box
-                  key={i}
-                  className={`w-2 h-2 mx-1 rounded-full ${i === 0 ? "bg-tertiary-500" : "bg-outline-200"}`}
-                />
-              ))}
-            </Box>
-          </VStack>
+          <ProductCarousel images={images} alt={product.name} />
           {/* Product Info Card */}
           <Card className="w-full bg-background-0 mt-4 p-4 rounded-xl">
             <Text className="text-2xl tracking-tight font-bold text-typography-950 mb-2">{product.name}</Text>
