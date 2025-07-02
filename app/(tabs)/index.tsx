@@ -1,6 +1,5 @@
-import { brands } from "@/assets/brands";
 import { promoProducts } from "@/assets/promo";
-import { BrandsCarousel } from "@/components/BrandsCarousel";
+import { BrandCard } from "@/components/BrandCard";
 import ProductCard from "@/components/ProductCard";
 import { PromoCarousel } from "@/components/PromoCarousel";
 import { Box } from "@/components/ui/box";
@@ -9,16 +8,28 @@ import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import TopicHeader from "@/components/ui/TopicHeader";
 import { useTheme } from "@/hooks/useTheme";
-import { useProducts } from "@/lib/query/hooks";
+import { useBrands, useProducts } from "@/lib/query/hooks";
 import { useRouter } from "expo-router";
 import { FlatList, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+const AppleLogo = require("@/assets/images/apple_logo.png");
+const SamsungLogo = require("@/assets/images/samsung_logo.png");
 
 export default function Index() {
   const router = useRouter();
   const { theme } = useTheme();
   const { data, isLoading, isError, error } = useProducts();
   const products = data || [];
+
+  const { data: brandsData, isLoading: isBrandsLoading, isError: isBrandsError, error: brandsError } = useBrands();
+  const brands = Array.isArray(brandsData)
+    ? brandsData
+        .filter((b) => b.name && (b.name.toLowerCase() === "samsung" || b.name.toLowerCase() === "apple"))
+        .map((b) => ({
+          ...b,
+          image: b.name.toLowerCase() === "apple" ? AppleLogo : SamsungLogo
+        }))
+    : [];
 
   if (isLoading) {
     return (
@@ -43,7 +54,11 @@ export default function Index() {
         <Box>
           <PromoCarousel promos={promoProducts} />
           <TopicHeader title="Checkout Brands"/>
-          <BrandsCarousel brands={brands} />
+          <Box className="flex-row justify-between px-5 py-3 mb-2">
+            {brands.map((brand: any) => (
+              <BrandCard key={brand._id} brand={brand} onPress={() => {}}/>
+            ))}
+          </Box>
           <TopicHeader title="Products"/>
           <FlatList
             data={products}

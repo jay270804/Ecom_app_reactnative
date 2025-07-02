@@ -5,8 +5,9 @@ import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import { useProducts } from "@/lib/query/hooks";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Fuse from 'fuse.js';
 
 export default function Search() {
   const router = useRouter();
@@ -23,14 +24,25 @@ export default function Search() {
     }, 200);
   }, []);
 
-  // Filter products by name or description
+  const fuse = useMemo(() => {
+    const options = {
+      // Define which keys in your objects to search
+      keys: [
+        { name: 'name', weight: 0.7 },
+        { name: 'description', weight: 0.3 }
+      ],
+      includeScore: true,
+      // Adjust threshold for more or less strict search (0=perfect, 1=match anything)
+      threshold: 0.4,
+    };
+    return new Fuse(products, options);
+  }, [products]); // Re-initialize only when products data changes
+
+  // Replace the .filter() method with fuse.search()
   const filtered = query
-    ? products.filter(
-        (p) =>
-          p.name.toLowerCase().includes(query.toLowerCase()) ||
-          p.description.toLowerCase().includes(query.toLowerCase())
-      )
+    ? fuse.search(query).map(result => result.item) // .map() to get the original items back
     : [];
+  // 👆 End of Fuse.js implementation
 
   if (isLoading) {
     return (
@@ -39,6 +51,7 @@ export default function Search() {
       </SafeAreaView>
     );
   }
+
   if (isError) {
     return (
       <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

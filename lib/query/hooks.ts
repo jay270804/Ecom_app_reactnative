@@ -182,7 +182,13 @@ export const useCategory = (id: string) => {
 export const useBrands = (params?: { page?: number; limit?: number; search?: string }) => {
   return useQuery({
     queryKey: queryKeys.brands.all(params),
-    queryFn: () => brandService.getAll(params),
+    queryFn: async () => {
+      const apiRes = await brandService.getAll(params);
+      // Return the brands array directly, mapping _id to id for consistency
+      return Array.isArray(apiRes.data)
+        ? apiRes.data.map((b: any) => ({ ...b, id: b._id }))
+        : [];
+    },
     staleTime: 1000 * 60 * 10, // 10 minutes - brands don't change often
   });
 };

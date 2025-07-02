@@ -13,15 +13,17 @@ export function BrandCard({ brand, onPress }: { brand: any; onPress: () => void 
       onPressOut={() => setPressed(false)}
       className={`flex-1 mx-1 my-2 rounded-lg border bg-background-0 items-center justify-between
         ${pressed ? "border-tertiary-500" : "border-outline-100"}`}
-      style={{ minWidth: 100, maxWidth: 120 }}
+      style={{ minWidth: 100, maxWidth: "50%" }}
     >
+      <Box className="bg-background-200 w-full rounded-t-lg">
       <Image
         source={brand.image}
-        className="h-24 w-full rounded-t-lg object-cover border-b-2 border-outline-500"
+        className="h-[144px] w-full border-b object-contain aspect-square mx-auto my-2"
         alt={`${brand.name}-logo`}
       />
-      <Box className={`w-full py-2 rounded-b-lg items-center`}>
-        <Text className={`text-xs font-semibold ${pressed ? "text-tertiary-500" : "text-typography-900"}`}>
+      </Box>
+      <Box className={`w-full py-3 rounded-b-lg items-center`}>
+        <Text className={`text-xs font-semibold tracking-wider ${pressed ? "text-tertiary-500" : "text-typography-900"}`}>
           {brand.name}
         </Text>
       </Box>
