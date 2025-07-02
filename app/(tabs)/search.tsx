@@ -1,8 +1,9 @@
-import { dummyProducts } from "@/assets/products";
 import ProductCatalogue from "@/components/ProductCatalogue";
 import { Box } from "@/components/ui/box";
 import { SearchHeader } from "@/components/ui/header";
+import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
+import { useProducts } from "@/lib/query/hooks";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,6 +12,9 @@ export default function Search() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   let inputRef: any = null;
+
+  const { data: allProducts, isLoading, isError, error } = useProducts();
+  const products = allProducts || [];
 
   // Focus input on mount
   useEffect(() => {
@@ -21,12 +25,27 @@ export default function Search() {
 
   // Filter products by name or description
   const filtered = query
-    ? dummyProducts.filter(
+    ? products.filter(
         (p) =>
           p.name.toLowerCase().includes(query.toLowerCase()) ||
           p.description.toLowerCase().includes(query.toLowerCase())
       )
     : [];
+
+  if (isLoading) {
+    return (
+      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Spinner size="large" />
+      </SafeAreaView>
+    );
+  }
+  if (isError) {
+    return (
+      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Error: {error?.message || "Failed to fetch products"}</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>

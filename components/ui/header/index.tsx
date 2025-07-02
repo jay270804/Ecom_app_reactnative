@@ -6,6 +6,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable } from "../pressable";
+import ShoppingCart from "@/components/svg/ShoppingCart";
+import SearchIcon from "@/components/svg/SearchIcon";
 
 export function Header() {
   const router = useRouter();
@@ -22,11 +24,7 @@ export function Header() {
           {/* The Input (search bar) */}
           <Input className="flex-1 flex-row items-center bg-secondary-500 rounded-2xl mx-2 px-3 border-2 border-secondary-700">
             <InputSlot className="pl-0 pr-2">
-              <Image
-                source={require("@/assets/images/search_icon.png")}
-                className="w-5 h-5"
-                alt="search_icon"
-              />
+              <SearchIcon height={20} width={20}/>
             </InputSlot>
             <InputField
               placeholder="Search"
@@ -47,11 +45,7 @@ export function Header() {
         <Pressable
           onPress={() => router.push('/cart')}
         >
-          <Image
-            source={require("@/assets/images/cart_icon.png")}
-            className="w-5 h-5"
-            alt="cart_icon"
-          />
+          <ShoppingCart height={20} width={20}/>
         </Pressable>
       </Box>
     </Box>

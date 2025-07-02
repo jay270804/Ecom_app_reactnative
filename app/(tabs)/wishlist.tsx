@@ -1,10 +1,11 @@
-import { dummyProducts } from "@/assets/products";
 import ProductCatalogue from "@/components/ProductCatalogue";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
+import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import { useToast } from "@/components/ui/toast";
+import { useProducts } from "@/lib/query/hooks";
 import { useAuthStore } from "@/store/slices/authSlice";
 import { useWishlistStore } from "@/store/slices/wishlistSlice";
 import { useRouter } from "expo-router";
@@ -16,7 +17,8 @@ export default function Wishlist() {
   const { isAuthenticated } = useAuthStore();
   const toast = useToast();
   const wishlisted = useWishlistStore((state) => state.items);
-  const products = dummyProducts.filter((p) => wishlisted.includes(p.id));
+  const { data: allProducts, isLoading, isError, error } = useProducts();
+  const products = (allProducts || []).filter((p) => wishlisted.includes(p.id));
 
   const handleLoginPress = () => {
     router.push("/auth/login");
@@ -61,6 +63,21 @@ export default function Wishlist() {
             </Box>
           </Box>
         </Box>
+      </SafeAreaView>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Spinner size="large" />
+      </SafeAreaView>
+    );
+  }
+  if (isError) {
+    return (
+      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Error: {error?.message || "Failed to fetch products"}</Text>
       </SafeAreaView>
     );
   }

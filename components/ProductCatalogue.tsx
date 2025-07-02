@@ -4,6 +4,7 @@ import { FlatList } from "react-native";
 import ProductCard from "./ProductCard";
 import { Box } from "./ui/box";
 import { Text } from "./ui/text";
+import { router, useRouter } from "expo-router";
 
 interface ProductCatalogueProps {
   products: Product[];
@@ -16,37 +17,26 @@ export default function ProductCatalogue({
   onProductPress,
   emptyText = "No products found.",
 }: ProductCatalogueProps) {
-  // If odd, add a dummy item for layout
-  const displayProducts =
-    products.length % 2 === 1
-      ? [...products, { id: "__dummy__" } as Product]
-      : products;
+  const displayProducts = products;
+
+      const router = useRouter()
 
   return (
     <Box className="flex-1">
       <FlatList
         data={displayProducts}
         renderItem={({ item }) =>
-          item.id === "__dummy__" ? (
-            <Box
-              style={{ width: "50%", aspectRatio: 0.75 }}
-              pointerEvents="none"
-            />
-          ) : (
-            <Box style={{ width: "50%" }}>
-              <ProductCard
-                product={item}
-                onPress={() => onProductPress?.(item)}
-              />
-            </Box>
-          )
+          <ProductCard
+          product={item}
+          onPress={() => router.push(`/product/${item.id}`)}
+        />
         }
         numColumns={2}
         horizontal={false}
-        contentContainerStyle={{ padding: 16, flexGrow: 1 }}
+        contentContainerStyle={{ padding: 16 }}
         columnWrapperStyle={{ justifyContent: "space-between" }}
         showsVerticalScrollIndicator={false}
-        keyExtractor={(item, idx) => item.id || String(idx)}
+        keyExtractor={(item) => item.id}
         ListEmptyComponent={
           <Box className="flex-1 items-center justify-center py-12">
             <Text className="text-base text-typography-700">{emptyText}</Text>

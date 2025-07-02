@@ -45,7 +45,7 @@ export default function ProductCard({product, onPress}: ProductCardProps){
     };
 
     return(
-        <Pressable onPress={onPress} className="flex-1">
+        <Pressable onPress={onPress} className="w-1/2">
           <Card className="p-3 rounded-lg flex-1 mx-1 my-2 flex flex-col justify-between border border-outline-100 min-h-[260px]">
             <Box className="flex-1">
               <Image
