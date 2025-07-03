@@ -101,6 +101,7 @@ export const useProducts = (filters?: ProductFilters) => {
         discountedPrice: p.discountedPrice,
         stockUnit: p.stockUnit,
         tags: p.tags,
+        categoryId: p.categoryId,
       }));
     },
     staleTime: 1000 * 60 * 2, // 2 minutes
@@ -164,7 +165,13 @@ export const useProductFilters = () => {
 export const useCategories = (params?: { page?: number; limit?: number; search?: string }) => {
   return useQuery({
     queryKey: queryKeys.categories.all(params),
-    queryFn: () => categoryService.getAll(params),
+    queryFn: async () => {
+      const apiRes = await categoryService.getAll(params);
+      // Map _id to id for consistency
+      return Array.isArray(apiRes.data)
+        ? apiRes.data.map((c: any) => ({ ...c, id: c._id }))
+        : [];
+    },
     staleTime: 1000 * 60 * 10, // 10 minutes - categories don't change often
   });
 };

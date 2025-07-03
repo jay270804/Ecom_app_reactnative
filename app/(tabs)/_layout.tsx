@@ -23,7 +23,7 @@ export default function TabLayout() {
         }),
         headerShown: false,
       }}
-      tabBar={props => <CustomTabBar {...props} />}
+      tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tabs.Screen
         name="index"
@@ -33,7 +33,16 @@ export default function TabLayout() {
             fontWeight: "bold",
           },
           tabBarIcon: ({ color }) => (
-            <MaterialIcons size={30} color={color} name="home" />
+            <MaterialIcons size={24} color={color} name="home" />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="categories"
+        options={{
+          title: "Categories",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons size={24} color={color} name="category" />
           ),
         }}
       />
@@ -42,7 +51,7 @@ export default function TabLayout() {
         options={{
           title: "Search",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons size={30} color={color} name="search" />
+            <MaterialIcons size={24} color={color} name="search" />
           ),
         }}
       />
@@ -51,7 +60,7 @@ export default function TabLayout() {
         options={{
           title: "Account",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons size={30} color={color} name="account-circle" />
+            <MaterialIcons size={24} color={color} name="account-circle" />
           ),
         }}
       />
@@ -60,9 +69,10 @@ export default function TabLayout() {
         options={{
           title: "Wishlist",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons size={30} color={color} name="heart-broken" />
+            <MaterialIcons size={24} color={color} name="heart-broken" />
           ),
-        }}/>
+        }}
+      />
     </Tabs>
   );
 }

@@ -10,6 +10,7 @@ const TAB_ICONS: Record<string, string> = {
   account: "person",
   search: "search", // or "search" if you want
   wishlist: "favorite-border",
+  categories: "category"
 };
 
 const TAB_LABELS: Record<string, string> = {
@@ -17,6 +18,7 @@ const TAB_LABELS: Record<string, string> = {
   account: "Profile",
   search: "Search",
   wishlist: "Wishlist",
+  categories: "Categories"
 };
 
 export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
@@ -53,19 +55,19 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
           <Pressable
             key={route.key}
             onPress={onPress}
-            className="flex-1 items-center justify-center py-2"
+            className="flex-1 items-center justify-center py-2 "
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={descriptors[route.key]?.options.tabBarAccessibilityLabel}
           >
             <MaterialIcons
               name={TAB_ICONS[route.name] as any}
-              size={28}
+              size={24}
               color={isFocused ? "#FF7300" : "#A0A0A0"}
               style={{ marginBottom: 2 }}
             />
             <Text
-              className={`text-xs ${isFocused ? "text-tertiary-500 font-semibold" : "text-typography-400 font-normal"}`}
+              className={`text-xs ${isFocused ? "text-tertiary-500 font-semibold" : "text-typography-400 font-normal tracking-tighter"}`}
             >
               {TAB_LABELS[route.name] || route.name}
             </Text>

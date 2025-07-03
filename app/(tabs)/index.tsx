@@ -1,5 +1,5 @@
 import { promoProducts } from "@/assets/promo";
-import { BrandCard } from "@/components/BrandCard";
+import { BrandCard, ExtrasBrandCard } from "@/components/BrandCard";
 import ProductCard from "@/components/ProductCard";
 import { PromoCarousel } from "@/components/PromoCarousel";
 import { Box } from "@/components/ui/box";
@@ -31,6 +31,14 @@ export default function Index() {
         }))
     : [];
 
+  const extrasBrands = Array.isArray(brandsData)
+    ? brandsData.filter((b) => b.name && !["samsung", "apple"].includes(b.name.toLowerCase()))
+    : [];
+
+  const handleBrandPress = (brandId: string) => {
+    router.push({ pathname: '/categories', params: { brandId } });
+  };
+
   if (isLoading) {
     return (
       <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -54,11 +62,28 @@ export default function Index() {
         <Box>
           <PromoCarousel promos={promoProducts} />
           <TopicHeader title="Checkout Brands"/>
-          <Box className="flex-row justify-between px-5 py-3 mb-2">
+          <Box className="flex-row justify-between px-5 py-4 mb-2">
             {brands.map((brand: any) => (
-              <BrandCard key={brand._id} brand={brand} onPress={() => {}}/>
+              <BrandCard key={brand._id} brand={brand} onPress={() => handleBrandPress(brand._id)}/>
             ))}
           </Box>
+          <TopicHeader title="Extras"/>
+          <FlatList
+            data={extrasBrands}
+            renderItem={({item}) => (
+              <ExtrasBrandCard
+                brand={item}
+                onPress={() => handleBrandPress(item._id)}
+              />
+            )}
+            numColumns={2}
+            horizontal={false}
+            contentContainerStyle={{ padding: 16 }}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item._id}
+            scrollEnabled={false}
+          />
           <TopicHeader title="Products"/>
           <FlatList
             data={products}

@@ -159,57 +159,6 @@ export interface ProfileUpdateRequest {
   profileImage?: string;
 }
 
-// Product creation/update types
-export interface CreateProductRequest {
-  name: string;
-  summary: string;
-  description: string;
-  price: number;
-  stockUnit: number;
-  discountPercentage: number;
-  categoryId: string;
-  brandId: string;
-  images?: string[];
-  tags?: string[];
-  coverImage?: File;
-}
-
-export interface UpdateProductRequest {
-  name?: string;
-  summary?: string;
-  description?: string;
-  price?: number;
-  stockUnit?: number;
-  discountPercentage?: number;
-  categoryId?: string;
-  brandId?: string;
-  images?: string[];
-  tags?: string[];
-  coverImage?: File;
-}
-
-// Category creation/update types
-export interface CreateCategoryRequest {
-  name: string;
-  description: string;
-}
-
-export interface UpdateCategoryRequest {
-  name?: string;
-  description?: string;
-}
-
-// Brand creation/update types
-export interface CreateBrandRequest {
-  name: string;
-  description: string;
-}
-
-export interface UpdateBrandRequest {
-  name?: string;
-  description?: string;
-}
-
 // User management types (admin only)
 export interface UpdateUserRequest {
   firstName?: string;
