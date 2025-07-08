@@ -15,12 +15,15 @@ interface CartState {
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
   isInCart: (productId: string) => boolean;
+  selectedAddressId: string | null;
+  setSelectedAddressId: (addressId: string) => void;
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      selectedAddressId: null,
       addToCart: (product, quantity = 1) => set((state) => {
         const idx = state.items.findIndex((item) => item.product.id === product.id);
         if (idx !== -1) {
@@ -39,10 +42,11 @@ export const useCartStore = create<CartState>()(
           item.product.id === productId ? { ...item, quantity: Math.max(1, quantity) } : item
         ),
       })),
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], selectedAddressId: null }),
       isInCart: (productId) => {
         return get().items.some((item) => item.product.id === productId);
       },
+      setSelectedAddressId: (addressId) => set({ selectedAddressId: addressId }),
     }),
     {
       name: 'cart-storage',

@@ -131,3 +131,38 @@ export const brandService = {
     return apiClient.get<ApiResponse<Brand>>(`/api/brands/${id}`);
   },
 };
+
+// Address Services
+export const addressService = {
+  // Get all addresses for the user
+  getAll: async (): Promise<any[]> => {
+    const res = await apiClient.get<any[]>('/api/addresses');
+    return res;
+  },
+};
+
+// Order & Payment Services
+export const orderService = {
+  // Create Razorpay order
+  createRazorpayOrder: async (amount: number, currency: string = 'INR'): Promise<any> => {
+    return apiClient.post<any>('/api/payments/create-order', { amount, currency });
+  },
+  // Verify payment and create order
+  verifyPaymentAndCreateOrder: async (data: {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+    orderItems: Array<{ product: string; quantity: number; price: number }>;
+    shippingAddress: string;
+  }): Promise<any> => {
+    return apiClient.post<any>('/api/payments/verify', data);
+  },
+  // Get all orders for the user
+  getOrders: async (): Promise<any[]> => {
+    return apiClient.get<any[]>('/api/orders');
+  },
+  // Get order by ID
+  getOrderById: async (id: string): Promise<any> => {
+    return apiClient.get<any>(`/api/orders/${id}`);
+  },
+};

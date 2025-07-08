@@ -38,3 +38,6 @@ yarn-error.*
 
 app-example
 Ecommerce Backend_APIS.postman_collection
+Ecommerce Address & Order APIs.postman_collection.json
+.env
+android

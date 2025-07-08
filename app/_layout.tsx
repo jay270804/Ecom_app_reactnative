@@ -52,11 +52,27 @@ export default function RootLayout() {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
+                name="checkout/order-success"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
                 name="cart"
                 options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="product/[id]"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="orders/index"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="orders/[id]"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="addresses"
                 options={{ headerShown: false }}
               />
               <Stack.Screen name="+not-found" />

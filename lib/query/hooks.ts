@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { authService, brandService, categoryService, productService } from '../api/services';
+import { addressService, authService, brandService, categoryService, orderService, productService } from '../api/services';
 import {
-  LoginRequest,
-  ProductFilters,
-  ProfileUpdateRequest,
-  RegisterRequest,
+    LoginRequest,
+    ProductFilters,
+    ProfileUpdateRequest,
+    RegisterRequest,
 } from '../api/types';
 import { queryKeys } from './queryClient';
 
@@ -206,5 +206,50 @@ export const useBrand = (id: string) => {
     queryFn: () => brandService.getById(id),
     enabled: !!id,
     staleTime: 1000 * 60 * 10, // 10 minutes
+  });
+};
+
+// Address Hooks
+export const useAddresses = () => {
+  return useQuery({
+    queryKey: ['addresses'],
+    queryFn: () => addressService.getAll(),
+    staleTime: 1000 * 60 * 10,
+  });
+};
+
+// Order Hooks
+export const useOrders = () => {
+  return useQuery({
+    queryKey: ['orders'],
+    queryFn: () => orderService.getOrders(),
+    staleTime: 1000 * 60 * 2,
+  });
+};
+
+export const useOrder = (id: string) => {
+  return useQuery({
+    queryKey: ['order', id],
+    queryFn: () => orderService.getOrderById(id),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 2,
+  });
+};
+
+export const useCreateRazorpayOrder = () => {
+  return useMutation({
+    mutationFn: (data: { amount: number; currency?: string }) => orderService.createRazorpayOrder(data.amount, data.currency || 'INR'),
+  });
+};
+
+export const useVerifyPaymentAndCreateOrder = () => {
+  return useMutation({
+    mutationFn: (data: {
+      razorpay_order_id: string;
+      razorpay_payment_id: string;
+      razorpay_signature: string;
+      orderItems: Array<{ product: string; quantity: number; price: number }>;
+      shippingAddress: string;
+    }) => orderService.verifyPaymentAndCreateOrder(data),
   });
 };

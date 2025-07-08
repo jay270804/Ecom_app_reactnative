@@ -7,7 +7,7 @@ import { Text } from "@/components/ui/text";
 import { Toast, ToastDescription, ToastTitle, useToast } from "@/components/ui/toast";
 import { VStack } from "@/components/ui/vstack";
 import { ANDROID_BASE_URL } from "@/lib/constant";
-import { useProducts } from "@/lib/query/hooks";
+import { useAddresses, useProducts } from "@/lib/query/hooks";
 import { useAuthStore } from "@/store/slices/authSlice";
 import { CartItem, useCartStore } from "@/store/slices/cartSlice";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -26,6 +26,8 @@ export default function Cart() {
   const { items: cart, removeFromCart, updateQuantity } = useCartStore();
   const insets = useSafeAreaInsets();
   const { data: productsData, isLoading: isProductsLoading, isError: isProductsError } = useProducts();
+  const { data: addresses, isLoading: isAddressesLoading } = useAddresses();
+  const { selectedAddressId, setSelectedAddressId } = useCartStore();
 
   // Pricing calculations
   const subtotalRaw = cart.reduce(
@@ -88,8 +90,11 @@ export default function Cart() {
       );
       return;
     }
-
-    // Proceed to checkout if authenticated
+    if (!selectedAddressId) {
+      Alert.alert("Select Address", "Please select a shipping address before checkout.");
+      return;
+    }
+    // Proceed to checkout if authenticated and address selected
     router.push("/checkout");
   };
 
@@ -103,6 +108,37 @@ export default function Cart() {
       <RegisterHeader title="Cart" />
       <Box className="flex-1">
         <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 120 }}>
+          {/* Address Selection */}
+          {!isEmpty && (
+            <Card className="mb-6 p-4 bg-background-0 rounded-2xl">
+              <Text className="text-base font-semibold mb-2">Select Shipping Address</Text>
+              {isAddressesLoading ? (
+                <Text>Loading addresses...</Text>
+              ) : addresses && addresses.length > 0 ? (
+                addresses.map((address: any) => (
+                  <Pressable
+                    key={address._id}
+                    className="flex-row items-center mb-2"
+                    onPress={() => setSelectedAddressId(address._id)}
+                  >
+                    <Box
+                      className={`w-5 h-5 rounded-full border-2 mr-2 ${selectedAddressId === address._id ? 'border-tertiary-500 bg-tertiary-500' : 'border-gray-400'}`}
+                      style={{ justifyContent: 'center', alignItems: 'center' }}
+                    >
+                      {selectedAddressId === address._id && (
+                        <Box className="w-3 h-3 rounded-full bg-white" />
+                      )}
+                    </Box>
+                    <Text className="flex-1">
+                      {address.title}: {address.AddrLine1}, {address.city}, {address.state} - {address.PIN}
+                    </Text>
+                  </Pressable>
+                ))
+              ) : (
+                <Text>No addresses found. Please add one in your profile.</Text>
+              )}
+            </Card>
+          )}
           <VStack space="md">
             {/* Cart Items */}
             {isEmpty ? (

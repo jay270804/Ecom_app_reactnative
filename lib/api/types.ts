@@ -169,3 +169,74 @@ export interface UpdateUserRequest {
   isActive?: boolean;
   emailVerified?: boolean;
 }
+
+// Address type
+export interface Address {
+  _id: string;
+  userId: string;
+  title: string;
+  AddrLine1: string;
+  AddrLine2?: string;
+  city: string;
+  state: string;
+  PIN: string;
+  landmark?: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+// Order item type
+export interface OrderItem {
+  product: string; // product id
+  quantity: number;
+  price: number;
+}
+
+// Order type
+export interface Order {
+  _id: string;
+  userId: string;
+  orderItems: OrderItem[];
+  shippingAddress: string | Address;
+  orderTotal: number;
+  orderStatus: string;
+  paymentStatus: string;
+  paymentId?: string;
+  razorpayOrderId?: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+// Razorpay order type
+export interface RazorpayOrder {
+  id: string;
+  entity: string;
+  amount: number;
+  amount_paid: number;
+  amount_due: number;
+  currency: string;
+  receipt: string | null;
+  status: string;
+  attempts: number;
+  created_at: number;
+  notes: any[];
+  offer_id: string | null;
+}
+
+// Payment verification request
+export interface PaymentVerificationRequest {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+  orderItems: OrderItem[];
+  shippingAddress: string;
+}
+
+// Payment verification response (could be order)
+export interface PaymentVerificationResponse {
+  order: Order;
+  message: string;
+  success: boolean;
+}
