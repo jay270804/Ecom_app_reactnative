@@ -1,19 +1,22 @@
 import { Box } from "@/components/ui/box";
-import { Button, ButtonText } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
+import { Pressable } from "@/components/ui/pressable";
 import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import { useAddresses } from "@/lib/query/hooks";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Addresses() {
   const { data: addresses, isLoading, isError, error } = useAddresses();
+  const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
       <RegisterHeader title="Addresses" />
-      <Box className="flex-1 bg-background-50 px-4 py-8">
+      <Box className="flex-1 bg-transparent px-4 py-8">
         {isLoading ? (
           <Box className="flex-1 justify-center items-center">
             <Spinner size="large" />
@@ -21,11 +24,11 @@ export default function Addresses() {
         ) : isError ? (
           <Text className="text-red-500">{error?.message || "Failed to fetch addresses."}</Text>
         ) : !addresses || addresses.length === 0 ? (
-          <Text className="text-base text-typography-700 mt-12">No addresses found.</Text>
+          <Text className="text-base text-typography-700">No addresses found.</Text>
         ) : (
           <Box className="gap-4 mb-8">
             {addresses.map((address: any) => (
-              <Card key={address._id} className="p-5 rounded-2xl bg-background-0 shadow-md mb-2">
+              <Card key={address._id} className="p-5 rounded-2xl bg-background-50 shadow-md mb-2">
                 <Text className="text-base font-bold text-typography-900 mb-1">{address.title}</Text>
                 <Text className="text-sm text-typography-700 mb-1">{address.AddrLine1}{address.AddrLine2 ? `, ${address.AddrLine2}` : ""}</Text>
                 <Text className="text-sm text-typography-700 mb-1">{address.city}, {address.state} - {address.PIN}</Text>
@@ -35,9 +38,30 @@ export default function Addresses() {
           </Box>
         )}
         {/* TODO: Post address api */}
-        <Button className="bg-tertiary-500 rounded-full" onPress={() => {}}>
-          <ButtonText className="text-base font-bold text-typography-0">Add New Address</ButtonText>
-        </Button>
+        <Box
+          className="flex-row items-center bg-background-100 mx-4 rounded-full shadow-lg"
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            marginHorizontal: 16,
+            marginBottom: 24 + insets.bottom,
+            zIndex: 10,
+            paddingBottom: insets.bottom,
+            height: 64 + insets.bottom,
+            justifyContent: "center",
+          }}
+        >
+          <Pressable
+            className="flex-1 bg-tertiary-500 rounded-full py-3 mx-2 items-center justify-center"
+            onPress={() => router.push("/addresses/add")}
+          >
+            <Text className="text-typography-0 text-base font-bold">
+              Add New Address
+            </Text>
+          </Pressable>
+        </Box>
       </Box>
     </SafeAreaView>
   );

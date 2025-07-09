@@ -11,8 +11,8 @@ export default function OrderSuccess() {
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
-      <Box className="flex-1 justify-center items-center bg-background-0 px-4">
-        <Card className="items-center p-8 rounded-2xl bg-background-0 shadow-lg">
+      <Box className="flex-1 justify-center items-center  px-4">
+        <Card className="items-center p-8 rounded-2xl bg-background-50 shadow-lg">
           <Text className="text-5xl mb-4">🎉</Text>
           <Text className="text-2xl font-bold text-tertiary-500 mb-2">Order Placed!</Text>
           <Text className="text-base text-typography-700 mb-4">

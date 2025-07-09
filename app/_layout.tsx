@@ -4,9 +4,9 @@ import { apiClient } from "@/lib/api/client";
 import { QueryProvider } from "@/lib/query/provider";
 import { useAuthStore } from "@/store/slices/authSlice";
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider as NavigationThemeProvider,
+    DarkTheme,
+    DefaultTheme,
+    ThemeProvider as NavigationThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -72,7 +72,11 @@ export default function RootLayout() {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
-                name="addresses"
+                name="addresses/index"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="addresses/add"
                 options={{ headerShown: false }}
               />
               <Stack.Screen name="+not-found" />

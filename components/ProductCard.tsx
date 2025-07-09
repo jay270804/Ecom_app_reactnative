@@ -1,4 +1,3 @@
-import { ANDROID_BASE_URL } from "@/lib/constant";
 import { useAuthStore } from "@/store/slices/authSlice";
 import { useCartStore } from "@/store/slices/cartSlice";
 import { useWishlistStore } from "@/store/slices/wishlistSlice";
@@ -33,8 +32,8 @@ export default function ProductCard({product, onPress}: ProductCardProps){
     const price = product?.price != null ? product.price : "-";
     const discountedPrice = product?.discountedPrice != null ? product.discountedPrice : price;
     const image = product?.coverImage
-        ? { uri: `${ANDROID_BASE_URL}${product.coverImage}` }
-        : `${ANDROID_BASE_URL}/uploads/products/e4fedf3a-714c-43e5-8d18-e229fd6483b8_original.jpg`;
+        ? { uri: product.coverImage }
+        : { uri: "https://ecommerce-react-native-app.s3.ap-south-1.amazonaws.com/products/default.jpg" };
 
     const handleWishlistPress = () => {
         if (!isAuthenticated) {

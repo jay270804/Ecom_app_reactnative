@@ -1,6 +1,5 @@
 import ProductCatalogue from "@/components/ProductCatalogue";
-import { Box } from "@/components/ui/box";
-import { Button, ButtonText } from "@/components/ui/button";
+import SignInRegisterPrompt from "@/components/SignInRegisterPrompt";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
 import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
@@ -33,36 +32,10 @@ export default function Wishlist() {
     return (
       <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
         <RegisterHeader title="Wishlist" />
-        <Box className="flex-1 items-center justify-center px-6">
-          <Box className="items-center">
-            <Text className="text-xl font-bold text-center mb-4">
-              Sign in to access your wishlist
-            </Text>
-            <Text className="text-base text-center text-gray-600 mb-8">
-              Create an account or sign in to save your favorite products and access them anytime.
-            </Text>
-
-            <Box className="w-full max-w-sm space-y-4 gap-4">
-              <Button
-                className="bg-tertiary-500 rounded-full"
-                onPress={handleLoginPress}
-              >
-                <ButtonText className="text-typography-0 font-semibold">
-                  Sign In
-                </ButtonText>
-              </Button>
-
-              <Button
-                className="bg-transparent border border-tertiary-500 rounded-full"
-                onPress={handleRegisterPress}
-              >
-                <ButtonText className="text-tertiary-500 font-semibold">
-                  Create Account
-                </ButtonText>
-              </Button>
-            </Box>
-          </Box>
-        </Box>
+        <SignInRegisterPrompt
+          title="Sign in to access your wishlist"
+          description="Create an account or sign in to save your favorite products and access them anytime."
+        />
       </SafeAreaView>
     );
   }

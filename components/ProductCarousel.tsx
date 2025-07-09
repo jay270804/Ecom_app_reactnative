@@ -1,4 +1,3 @@
-import { ANDROID_BASE_URL } from "@/lib/constant";
 import React, { useState } from "react";
 import { Dimensions } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
@@ -16,8 +15,7 @@ export default function ProductCarousel({ images, alt }: ProductCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   // Filter and map images to full URLs (same logic as ProductCard)
   const imageUrls = images
-    .filter((img): img is string => typeof img === "string" && !!img)
-    .map(img => img.startsWith('http') ? img : `${ANDROID_BASE_URL}${img}`);
+    .filter((img): img is string => typeof img === "string" && !!img);
 
   return (
     <VStack className="w-full items-center">
