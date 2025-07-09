@@ -1,3 +1,4 @@
+import SignInRegisterPrompt from "@/components/SignInRegisterPrompt";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -14,11 +15,11 @@ export default function Account() {
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
       <RegisterHeader title="Profile" />
-      <Box className="flex-1 bg-background-50 px-4 py-8">
+      <Box className="flex-1 bg-transparent px-4 py-8">
         {isAuthenticated && user ? (
           <>
             {/* User Info Card */}
-            <Card className="mb-6 p-5 rounded-2xl bg-background-0 shadow-md">
+            <Card className="mb-6 p-5 rounded-2xl bg-background-50 shadow-md">
               <Text className="text-lg font-semibold text-typography-900 mb-1">
                 {user.firstName} {user.lastName}
               </Text>
@@ -45,7 +46,7 @@ export default function Account() {
                 <ButtonText className="text-base font-bold text-tertiary-600">Manage Addresses</ButtonText>
               </Button>
               <Button
-                className="bg-red-500 rounded-full"
+                className="bg-transparent rounded-full"
                 onPress={logout}
                 isDisabled={isLoading}
               >
@@ -56,15 +57,10 @@ export default function Account() {
             </Box>
           </>
         ) : (
-          <Box className="items-center gap-4 mt-12">
-            <Text className="text-gray-600 mb-2">Please login to access your account</Text>
-            <Button className="bg-tertiary-500 rounded-full" onPress={() => router.push('/auth/register')}>
-              <ButtonText className="text-typography-0 font-semibold">Register</ButtonText>
-            </Button>
-            <Button className="bg-background-0 border border-tertiary-500 rounded-full" onPress={() => router.push('/auth/login')}>
-              <ButtonText className="text-tertiary-500 font-semibold">Login</ButtonText>
-            </Button>
-          </Box>
+          <SignInRegisterPrompt
+            title="Sign in to access your account"
+            description="Create an account or sign in to manage your orders, addresses, and more."
+          />
         )}
       </Box>
     </SafeAreaView>

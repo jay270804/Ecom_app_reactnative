@@ -15,7 +15,7 @@ export default function Orders() {
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
       <RegisterHeader title="My Orders" />
-      <Box className="flex-1 bg-background-50 px-4 py-8">
+      <Box className="flex-1 bg-transparent px-4 py-8">
         {isLoading ? (
           <Box className="flex-1 justify-center items-center">
             <Spinner size="large" />
@@ -31,7 +31,7 @@ export default function Orders() {
                 key={order._id}
                 onPress={() => router.push({ pathname: "/orders/[id]", params: { id: order._id } } as any)}
               >
-                <Card className="p-5 rounded-2xl bg-background-0 shadow-md mb-2">
+                <Card className="p-5 rounded-2xl bg-background-50 shadow-md mb-2">
                   <Text className="text-base font-bold text-typography-900 mb-1">
                     Order #{order._id.slice(-6).toUpperCase()}
                   </Text>
