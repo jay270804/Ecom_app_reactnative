@@ -1,4 +1,4 @@
-import { HapticTab } from "@/app-example/components/HapticTab";
+import { HapticTab } from "@/components/HapticTab";
 import { CustomTabBar } from "@/components/ui/tab-bar/CustomTabBar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
