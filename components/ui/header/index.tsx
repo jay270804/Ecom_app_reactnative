@@ -22,7 +22,7 @@ export function Header() {
       <Box className="w-2/3 flex flex-row items-center justify-between gap-4">
         <Box className="relative flex-1 h-9">
           {/* The Input (search bar) */}
-          <Input className="flex-1 flex-row items-center bg-secondary-400 rounded-2xl mx-2 px-3 border border-secondary-800">
+          <Input className="flex-1 flex-row items-center justify-center bg-secondary-400 rounded-2xl mx-2 px-3 border border-secondary-800">
             <InputSlot className="pl-0 pr-2">
               <SearchIcon height={20} width={20}/>
             </InputSlot>

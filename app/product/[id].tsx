@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { ProductHeader } from "@/components/ui/header";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
-import { ANDROID_BASE_URL } from "@/lib/constant";
 import { useProduct } from "@/lib/query/hooks";
 import { useCartStore } from "@/store/slices/cartSlice";
 import { useWishlistStore } from "@/store/slices/wishlistSlice";
@@ -36,7 +35,6 @@ export default function ProductScreen() {
   const images = product
     ? [product.coverImage, ...(product.images || [])]
         .filter((img): img is string => typeof img === "string")
-        .map(img => `${ANDROID_BASE_URL}${img}`)
     : [];
 
   const hasDiscount = product?.discountPercentage && product.discountPercentage > 0;
@@ -103,7 +101,7 @@ export default function ProductScreen() {
       >
         {cartQty === 0 ? (
           <Pressable
-            className="flex-1 bg-tertiary-500 rounded-full py-3 mx-2 items-center justify-center"
+            className="flex-1 bg-tertiary-500 rounded-full py-4 mx-2 items-center justify-center"
             onPress={() => addToCart(product)}
           >
             <Text className="text-typography-0 text-base font-bold">Add to Cart</Text>
@@ -111,7 +109,7 @@ export default function ProductScreen() {
         ) : (
           <>
             <Pressable
-              className="bg-background-0 rounded-full w-1/4 py-3 items-center justify-center mx-2"
+              className="bg-background-0 rounded-full w-1/4 py-4 items-center justify-center mx-2"
               onPress={() => removeFromCart(product.id)}
             >
               <MaterialIcons name="delete-outline" size={22} color="#68686B" />

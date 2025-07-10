@@ -139,6 +139,10 @@ export const addressService = {
     const res = await apiClient.get<any[]>('/api/addresses');
     return res;
   },
+  // Create a new address
+  create: async (address: any): Promise<any> => {
+    return apiClient.post<any>('/api/addresses', address);
+  },
 };
 
 // Order & Payment Services

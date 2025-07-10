@@ -6,7 +6,6 @@ import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { Toast, ToastDescription, ToastTitle, useToast } from "@/components/ui/toast";
 import { VStack } from "@/components/ui/vstack";
-import { ANDROID_BASE_URL } from "@/lib/constant";
 import { useAddresses, useProducts } from "@/lib/query/hooks";
 import { useAuthStore } from "@/store/slices/authSlice";
 import { CartItem, useCartStore } from "@/store/slices/cartSlice";
@@ -155,8 +154,8 @@ export default function Cart() {
                   <Image
                     source={
                       item.product.coverImage
-                        ? { uri: `${ANDROID_BASE_URL}${item.product.coverImage}` }
-                        : { uri: `${ANDROID_BASE_URL}/uploads/products/e4fedf3a-714c-43e5-8d18-e229fd6483b8_original.jpg` }
+                        ? { uri: item.product.coverImage }
+                        : { uri: "https://ecommerce-react-native-app.s3.ap-south-1.amazonaws.com/products/default.jpg" }
                     }
                     size="lg"
                     className="rounded-md mr-3 bg-background-0"
@@ -241,7 +240,7 @@ export default function Cart() {
         </ScrollView>
         {/* Absolute Place Order/Browse Products Button */}
         <Box
-          className="flex-row items-center bg-background-300 mx-4 rounded-full shadow-lg"
+          className="flex-row items-center bg-background-100 mx-4 rounded-full shadow-lg"
           style={{
             position: "absolute",
             left: 0,
@@ -256,7 +255,7 @@ export default function Cart() {
           }}
         >
           <Pressable
-            className="flex-1 bg-tertiary-500 rounded-full py-3 mx-2 items-center justify-center"
+            className="flex-1 bg-tertiary-500 rounded-full py-4 mx-2 items-center justify-center"
             onPress={() => isEmpty ? router.push("/") : handleCheckout()}
           >
             <Text className="text-typography-0 text-base font-bold">

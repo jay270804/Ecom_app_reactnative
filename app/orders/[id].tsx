@@ -4,7 +4,6 @@ import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
 import { Image } from "@/components/ui/image";
 import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
-import { ANDROID_BASE_URL } from "@/lib/constant";
 import { useOrder } from "@/lib/query/hooks";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -50,8 +49,8 @@ export default function OrderDetails() {
                 const name = product.name || item.product?.name || item.product || 'Product';
                 const coverImage = product.coverImage;
                 const imageUrl = coverImage
-                  ? `${ANDROID_BASE_URL}${coverImage}`
-                  : `${ANDROID_BASE_URL}/uploads/products/e4fedf3a-714c-43e5-8d18-e229fd6483b8_original.jpg`;
+                  ? coverImage
+                  : "https://ecommerce-react-native-app.s3.ap-south-1.amazonaws.com/products/default.jpg";
                 return (
                   <Card key={idx} className="flex-row items-center bg-background-100 border border-secondary-500 rounded-xl px-4 py-4 mb-2">
                     {/* Product Image */}
