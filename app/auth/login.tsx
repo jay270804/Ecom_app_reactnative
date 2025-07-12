@@ -153,12 +153,13 @@ export default function Login() {
                 <InputField
                   value={form.email}
                   onChangeText={(v) => handleChange("email", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   onFocus={() => setFocus("email")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="user123@example.com"
                 />
               </Input>
             </Box>
@@ -184,11 +185,12 @@ export default function Login() {
                 <InputField
                   value={form.password}
                   onChangeText={(v) => handleChange("password", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   secureTextEntry
                   onFocus={() => setFocus("password")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="Enter your password"
                 />
               </Input>
             </Box>

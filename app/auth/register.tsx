@@ -303,10 +303,11 @@ export default function Register() {
                   <InputField
                     value={form.firstName}
                     onChangeText={(v) => handleChange("firstName", v)}
-                    className="text-typography-900 text-sm"
+                    className="text-typography-900 text-sm placeholder:text-typography-400"
                     onFocus={() => setFocus("firstName")}
                     onBlur={() => setFocus(null)}
                     editable={!isLoading}
+                    placeholder="Jay"
                   />
                 </Input>
               </Box>
@@ -330,10 +331,11 @@ export default function Register() {
                   <InputField
                     value={form.lastName}
                     onChangeText={(v) => handleChange("lastName", v)}
-                    className="text-typography-900 text-sm"
+                    className="text-typography-900 text-sm placeholder:text-typography-400"
                     onFocus={() => setFocus("lastName")}
                     onBlur={() => setFocus(null)}
                     editable={!isLoading}
+                    placeholder="Patel"
                   />
                 </Input>
               </Box>
@@ -360,12 +362,13 @@ export default function Register() {
                 <InputField
                   value={form.email}
                   onChangeText={(v) => handleChange("email", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   onFocus={() => setFocus("email")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="user123@example.com"
                 />
               </Input>
             </Box>
@@ -391,11 +394,12 @@ export default function Register() {
                 <InputField
                   value={form.password}
                   onChangeText={(v) => handleChange("password", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   secureTextEntry
                   onFocus={() => setFocus("password")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="Create a password"
                 />
               </Input>
             </Box>
@@ -421,11 +425,12 @@ export default function Register() {
                 <InputField
                   value={form.confirmPassword}
                   onChangeText={(v) => handleChange("confirmPassword", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   secureTextEntry
                   onFocus={() => setFocus("confirmPassword")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="Confirm your password"
                 />
               </Input>
             </Box>
@@ -451,11 +456,12 @@ export default function Register() {
                 <InputField
                   value={form.mobile}
                   onChangeText={(v) => handleChange("mobile", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   keyboardType="phone-pad"
                   onFocus={() => setFocus("mobile")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="Enter 10 digit Mobile no."
                 />
               </Input>
             </Box>

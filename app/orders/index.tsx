@@ -1,8 +1,8 @@
+import OrdersSkeleton from "@/components/skeletons/OrdersSkeleton";
 import { Box } from "@/components/ui/box";
 import { Card } from "@/components/ui/card";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
 import { Pressable } from "@/components/ui/pressable";
-import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import { useOrders } from "@/lib/query/hooks";
 import { useRouter } from "expo-router";
@@ -17,9 +17,7 @@ export default function Orders() {
       <RegisterHeader title="My Orders" />
       <Box className="flex-1 bg-transparent px-4 py-8">
         {isLoading ? (
-          <Box className="flex-1 justify-center items-center">
-            <Spinner size="large" />
-          </Box>
+          <OrdersSkeleton />
         ) : isError ? (
           <Text className="text-red-500">{error?.message || "Failed to fetch orders."}</Text>
         ) : !orders || orders.length === 0 ? (

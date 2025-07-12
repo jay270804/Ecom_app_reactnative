@@ -46,11 +46,11 @@ export default function Account() {
                 <ButtonText className="text-base font-bold text-tertiary-600">Manage Addresses</ButtonText>
               </Button>
               <Button
-                className="bg-transparent rounded-full"
+                className="bg-transparent rounded-full border border-outline-500"
                 onPress={logout}
                 isDisabled={isLoading}
               >
-                <ButtonText className="text-base font-bold text-typography-0">
+                <ButtonText className="text-base font-bold  text-typography-700">
                   {isLoading ? "Logging out..." : "Logout"}
                 </ButtonText>
               </Button>
