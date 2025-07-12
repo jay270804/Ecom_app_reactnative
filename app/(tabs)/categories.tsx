@@ -2,9 +2,9 @@ const AppleLogo = require("@/assets/images/apple_logo.png");
 const SamsungLogo = require("@/assets/images/samsung_logo.png");
 import { BrandCard, CategoryCard, ExtrasBrandCard } from "@/components/BrandCard";
 import ProductCatalogue from "@/components/ProductCatalogue";
+import CategoriesSkeleton from "@/components/skeletons/CategoriesSkeleton";
 import { Box } from "@/components/ui/box";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
-import { Spinner } from "@/components/ui/spinner";
 import TopicHeader from "@/components/ui/TopicHeader";
 import { useBrands, useCategories, useProducts } from "@/lib/query/hooks";
 import { useLocalSearchParams } from "expo-router";
@@ -72,16 +72,9 @@ export default function CategoriesScreen() {
   const appleSamsungBrands = brands.filter((b: any) => ["apple", "samsung"].includes(b.name?.toLowerCase()));
   const otherBrands = brands.filter((b: any) => !["apple", "samsung"].includes(b.name?.toLowerCase()));
 
-  // Show spinner if any loading state is true
+  // Show skeleton if any loading state is true
   if (brandsLoading || categoriesLoading || productsLoading) {
-    return (
-      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
-        <RegisterHeader title="Categories" />
-        <Box className="flex-1 justify-center items-center">
-          <Spinner size="large" />
-        </Box>
-      </SafeAreaView>
-    );
+    return <CategoriesSkeleton />;
   }
 
   return (

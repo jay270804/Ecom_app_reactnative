@@ -37,11 +37,19 @@ export const useCartStore = create<CartState>()(
       removeFromCart: (productId) => set((state) => ({
         items: state.items.filter((item) => item.product.id !== productId),
       })),
-      updateQuantity: (productId, quantity) => set((state) => ({
-        items: state.items.map((item) =>
-          item.product.id === productId ? { ...item, quantity: Math.max(1, quantity) } : item
-        ),
-      })),
+      updateQuantity: (productId, quantity) => set((state) => {
+        if (quantity <= 0) {
+          // Remove item if quantity is 0 or less
+          return {
+            items: state.items.filter((item) => item.product.id !== productId),
+          };
+        }
+        return {
+          items: state.items.map((item) =>
+            item.product.id === productId ? { ...item, quantity } : item
+          ),
+        };
+      }),
       clearCart: () => set({ items: [], selectedAddressId: null }),
       isInCart: (productId) => {
         return get().items.some((item) => item.product.id === productId);

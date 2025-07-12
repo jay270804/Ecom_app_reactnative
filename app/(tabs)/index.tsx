@@ -2,10 +2,10 @@ import { promoProducts } from "@/assets/promo";
 import { BrandCard, ExtrasBrandCard } from "@/components/BrandCard";
 import ProductCard from "@/components/ProductCard";
 import { PromoCarousel } from "@/components/PromoCarousel";
+import HomeSkeleton from "@/components/skeletons/HomeSkeleton";
 import { Box } from "@/components/ui/box";
+import ErrorAlert from "@/components/ui/error-alert";
 import { Header } from "@/components/ui/header";
-import { Spinner } from "@/components/ui/spinner";
-import { Text } from "@/components/ui/text";
 import TopicHeader from "@/components/ui/TopicHeader";
 import { useTheme } from "@/hooks/useTheme";
 import { useBrands, useProducts } from "@/lib/query/hooks";
@@ -18,10 +18,10 @@ const SamsungLogo = require("@/assets/images/samsung_logo.png");
 export default function Index() {
   const router = useRouter();
   const { theme } = useTheme();
-  const { data, isLoading, isError, error } = useProducts();
+  const { data, isLoading, isError, error, refetch: refetchProducts } = useProducts();
   const products = data || [];
 
-  const { data: brandsData, isLoading: isBrandsLoading, isError: isBrandsError, error: brandsError } = useBrands();
+  const { data: brandsData, isLoading: isBrandsLoading, isError: isBrandsError, error: brandsError, refetch: refetchBrands } = useBrands();
   const brands = Array.isArray(brandsData)
     ? brandsData
         .filter((b) => b.name && (b.name.toLowerCase() === "samsung" || b.name.toLowerCase() === "apple"))
@@ -39,18 +39,32 @@ export default function Index() {
     router.push({ pathname: '/categories', params: { brandId } });
   };
 
-  if (isLoading) {
-    return (
-      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Spinner size="large"/>
-      </SafeAreaView>
-    );
+  const handleRetry = async () => {
+    try {
+      // Refetch both products and brands data
+      await Promise.all([
+        refetchProducts(),
+        refetchBrands()
+      ]);
+    } catch (error) {
+      console.error('Error refetching data:', error);
+    }
+  };
+
+  if (isLoading || isBrandsLoading) {
+    return <HomeSkeleton />;
   }
 
-  if (isError) {
+  if (isError || isBrandsError) {
     return (
-      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Error: {error?.message || "Failed to fetch products"}</Text>
+      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
+        <Header />
+        <ErrorAlert
+          title="Failed to connect to server"
+          message="Please check your connection and try again."
+          onRetry={handleRetry}
+          variant="outline"
+        />
       </SafeAreaView>
     );
   }

@@ -9,6 +9,14 @@
       "distribution": "internal"
     },
     "preview": {
+      "android":{
+        "buildType":"apk"
+      },
+      "env":{
+        "EXPO_PUBLIC_RAZORPAY_KEY_ID":"rzp_test_At3516AIopBVr7"
+      }
+    },
+    "preview1": {
       "distribution": "internal"
     },
     "production": {

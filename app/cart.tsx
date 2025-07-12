@@ -1,10 +1,13 @@
+import { AlertDialog, AlertDialogBackdrop, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Box } from "@/components/ui/box";
+import { Button, ButtonText } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
+import { Heading } from "@/components/ui/heading";
 import { Image } from "@/components/ui/image";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
-import { Toast, ToastDescription, ToastTitle, useToast } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/toast";
 import { VStack } from "@/components/ui/vstack";
 import { useAddresses, useProducts } from "@/lib/query/hooks";
 import { useAuthStore } from "@/store/slices/authSlice";
@@ -28,6 +31,10 @@ export default function Cart() {
   const { data: addresses, isLoading: isAddressesLoading } = useAddresses();
   const { selectedAddressId, setSelectedAddressId } = useCartStore();
 
+  // Alert dialog state
+  const [showRemoveDialog, setShowRemoveDialog] = React.useState(false);
+  const [itemToRemove, setItemToRemove] = React.useState<{ productId: string; productName: string } | null>(null);
+
   // Pricing calculations
   const subtotalRaw = cart.reduce(
     (sum: number, item: CartItem) =>
@@ -40,33 +47,38 @@ export default function Cart() {
   const gst = Math.round(subtotal * 0.05);
   const total = Math.round(subtotal + shipping + gst);
 
-  // Remove item with confirmation
-  const handleRemove = (idx: number) => {
-    const product = cart[idx]?.product;
-    if (!product) return;
+  // Show remove confirmation dialog
+  const showRemoveConfirmation = (productId: string, productName: string) => {
+    setItemToRemove({ productId, productName });
+    setShowRemoveDialog(true);
+  };
 
-    toast.show({
-      render: ({ id }) => {
-        return (
-          <Toast nativeID={id} action="warning" variant="solid">
-            <ToastTitle>Remove Item</ToastTitle>
-            <ToastDescription>
-              Are you sure you want to remove "{product.name}" from the cart?
-            </ToastDescription>
-          </Toast>
-        );
-      },
-    });
+  // Handle remove confirmation
+  const handleRemoveConfirm = () => {
+    if (itemToRemove) {
+      removeFromCart(itemToRemove.productId);
+      setShowRemoveDialog(false);
+      setItemToRemove(null);
+    }
+  };
 
-    // For now, we'll remove directly. In a real app, you might want a confirmation dialog
-    removeFromCart(product.id);
+  // Handle remove cancel
+  const handleRemoveCancel = () => {
+    setShowRemoveDialog(false);
+    setItemToRemove(null);
   };
 
   // Quantity controls
   const updateQty = (idx: number, newQty: number) => {
     const product = cart[idx]?.product;
     if (!product) return;
-    updateQuantity(product.id, newQty);
+
+    // If quantity would become 0, show confirmation dialog
+    if (newQty <= 0) {
+      showRemoveConfirmation(product.id, product.name);
+    } else {
+      updateQuantity(product.id, newQty);
+    }
   };
 
   // Handle checkout with authentication check
@@ -172,7 +184,7 @@ export default function Cart() {
                       </Text>
                       {/* Remove (cross) icon */}
                       <Pressable
-                        onPress={() => handleRemove(idx)}
+                        onPress={() => showRemoveConfirmation(item.product.id, item.product.name)}
                         className="p-1 ml-2"
                       >
                         <MaterialIcons name="close" size={22} color="#68686B" />
@@ -264,6 +276,43 @@ export default function Cart() {
           </Pressable>
         </Box>
       </Box>
+
+      {/* Remove Item Confirmation Dialog */}
+      <AlertDialog isOpen={showRemoveDialog} onClose={handleRemoveCancel}>
+        <AlertDialogBackdrop />
+        <AlertDialogContent className="w-4/5 max-w-[415px] gap-4 px-5 items-center">
+          <Box className="rounded-full h-[52px] w-[52px] bg-background-error items-center justify-center">
+            <MaterialIcons name="remove-shopping-cart" size={24} color="#EF4444" />
+          </Box>
+          <AlertDialogHeader className="mb-2">
+            <Heading size="md">Remove Item</Heading>
+          </AlertDialogHeader>
+          <AlertDialogBody>
+            <Text size="sm" className="text-center text-typography-700">
+              Are you sure you want to remove "{itemToRemove?.productName}" from your cart?
+            </Text>
+          </AlertDialogBody>
+          <AlertDialogFooter className="mt-5">
+            <Button
+              size="sm"
+              action="negative"
+              onPress={handleRemoveConfirm}
+              className="px-[30px]"
+            >
+              <ButtonText>Remove</ButtonText>
+            </Button>
+            <Button
+              variant="outline"
+              action="secondary"
+              onPress={handleRemoveCancel}
+              size="sm"
+              className="px-[30px] border-tertiary-500"
+            >
+              <ButtonText className="text-tertiary-500">Cancel</ButtonText>
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </SafeAreaView>
   );
 }
