@@ -1,4 +1,5 @@
 import ProductCarousel from "@/components/ProductCarousel";
+import ProductDetailsSkeleton from "@/components/skeletons/ProductDetailsSkeleton";
 import { Box } from "@/components/ui/box";
 import { Card } from "@/components/ui/card";
 import { ProductHeader } from "@/components/ui/header";
@@ -39,9 +40,6 @@ export default function ProductScreen() {
 
   const hasDiscount = product?.discountPercentage && product.discountPercentage > 0;
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
   if (isError || !product) {
     return <Text>Error loading product: {error?.message || 'Not found'}</Text>;
   }
@@ -57,31 +55,35 @@ export default function ProductScreen() {
       />
       {/* Main Content Box */}
       <Box className="flex-1 items-center justify-start px-0 pt-4">
-        <Box className="w-full max-w-md rounded-lg px-6 py-2 items-center">
-          {/* Product Image Carousel */}
-          <ProductCarousel images={images} alt={product.name} />
-          {/* Product Info Card */}
-          <Card className="w-full bg-background-0 mt-4 p-4 rounded-xl">
-            <Text className="text-2xl tracking-tight font-bold text-typography-950 mb-2">{product.name}</Text>
-            <Box className="flex-row items-center mb-2 gap-2">
-              <Text className="text-xl font-bold text-tertiary-500">
-                Rs. {hasDiscount ? product.discountedPrice : product.price}/-
-              </Text>
-              {hasDiscount && (
-                <Text className="text-base text-typography-400 line-through">Rs. {product.price}/-</Text>
-              )}
-            </Box>
-            {hasDiscount && (
-              <Box className="mb-2 w-[72px]">
-                <Text className=" bg-tertiary-500 text-typography-0 px-2 py-2 rounded-md text-xs font-semibold">
-                  -{product.discountPercentage}% OFF
+        {isLoading ? (
+          <ProductDetailsSkeleton />
+        ) : (
+          <Box className="w-full max-w-md rounded-lg px-6 py-2 items-center">
+            {/* Product Image Carousel */}
+            <ProductCarousel images={images} alt={product.name} />
+            {/* Product Info Card */}
+            <Card className="w-full bg-background-0 mt-4 p-4 rounded-xl">
+              <Text className="text-2xl tracking-tight font-bold text-typography-950 mb-2">{product.name}</Text>
+              <Box className="flex-row items-center mb-2 gap-2">
+                <Text className="text-xl font-bold text-tertiary-500">
+                  Rs. {hasDiscount ? product.discountedPrice : product.price}/-
                 </Text>
+                {hasDiscount && (
+                  <Text className="text-base text-typography-400 line-through">Rs. {product.price}/-</Text>
+                )}
               </Box>
-            )}
-            <Text className="text-base font-semibold text-typography-900 mb-1">Description</Text>
-            <Text className="text-xs text-typography-700 mb-2 line-clamp-4">{product.description}</Text>
-          </Card>
-        </Box>
+              {hasDiscount && (
+                <Box className="mb-2 w-[72px]">
+                  <Text className=" bg-tertiary-500 text-typography-0 px-2 py-2 rounded-md text-xs font-semibold">
+                    -{product.discountPercentage}% OFF
+                  </Text>
+                </Box>
+              )}
+              <Text className="text-base font-semibold text-typography-900 mb-1">Description</Text>
+              <Text className="text-xs text-typography-700 mb-2 line-clamp-4">{product.description}</Text>
+            </Card>
+          </Box>
+        )}
       </Box>
       {/* Floating Add to Cart / Quantity Control - styled like CustomTabBar */}
       <Box

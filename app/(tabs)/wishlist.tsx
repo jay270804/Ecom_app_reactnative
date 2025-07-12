@@ -1,6 +1,8 @@
 import ProductCatalogue from "@/components/ProductCatalogue";
 import SignInRegisterPrompt from "@/components/SignInRegisterPrompt";
+import { Box } from "@/components/ui/box";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
+import { Image } from "@/components/ui/image";
 import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import { useToast } from "@/components/ui/toast";
@@ -10,6 +12,8 @@ import { useWishlistStore } from "@/store/slices/wishlistSlice";
 import { useRouter } from "expo-router";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+const wishlistIllustration = require("@/assets/images/wishlist-screen-illustration.png");
 
 export default function Wishlist() {
   const router = useRouter();
@@ -58,11 +62,21 @@ export default function Wishlist() {
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
       <RegisterHeader title="Wishlist" />
-      <ProductCatalogue
-        products={products}
-        onProductPress={(product) => router.push(`/product/${product.id}`)}
-        emptyText="No products in your wishlist."
-      />
+      {products.length === 0 ? (
+        <Box className="flex items-center py-5">
+          <Image
+            source={wishlistIllustration}
+            alt="Your wishlist is feeling lonely"
+            className="w-72 h-72 rounded-md"
+            resizeMode="cover"
+          />
+        </Box>
+      ) : (
+        <ProductCatalogue
+          products={products}
+          onProductPress={(product) => router.push(`/product/${product.id}`)}
+        />
+      )}
     </SafeAreaView>
   );
 }

@@ -41,7 +41,7 @@ export default function AddAddress() {
         ),
       });
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
-      router.replace('/addresses/index');
+      router.replace('/addresses');
     },
     onError: (err: any) => {
       setError(err.message || "Failed to add address");
@@ -218,7 +218,7 @@ export default function AddAddress() {
             <Box className="flex-row justify-center my-2">
               <Text
                 className="text-xs text-tertiary-500 font-semibold "
-                onPress={() => router.replace('/addresses/index')}
+                onPress={() => router.replace('/addresses')}
               >
                 Cancel
               </Text>
