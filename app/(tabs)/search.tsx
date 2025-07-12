@@ -3,12 +3,15 @@ import SearchSkeleton from "@/components/skeletons/SearchSkeleton";
 import { Box } from "@/components/ui/box";
 import ErrorAlert from "@/components/ui/error-alert";
 import { SearchHeader } from "@/components/ui/header";
-import { Text } from "@/components/ui/text";
+import { Image } from "@/components/ui/image";
 import { useProducts } from "@/lib/query/hooks";
 import { useRouter } from "expo-router";
 import Fuse from 'fuse.js';
 import React, { useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+const searchIllustration = require("@/assets/images/search-screen-illustration.png");
+const noMatchIllustration = require("@/assets/images/search-screen-no-match-found-illustration.png");
 
 export default function Search() {
   const router = useRouter();
@@ -42,7 +45,7 @@ export default function Search() {
       threshold: 0.4,
     };
     return new Fuse(products, options);
-  }, [products]); // Re-initialize only when products data changes
+  }, [products]);
 
   const filtered = query
     ? fuse.search(query).map(result => result.item)
@@ -68,16 +71,30 @@ export default function Search() {
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
       <SearchHeader query={query} setQuery={setQuery} inputRef={(ref) => { inputRef = ref; }} />
-      {/* Product Catalogue or Empty State */}
       {query ? (
-        <ProductCatalogue
-          products={filtered}
-          onProductPress={(product) => router.push(`/product/${product.id}`)}
-          emptyText={"No products found."}
-        />
+        filtered.length > 0 ? (
+          <ProductCatalogue
+            products={filtered}
+            onProductPress={(product) => router.push(`/product/${product.id}`)}
+          />
+        ) : (
+          <Box className="flex items-center py-5">
+            <Image
+              source={noMatchIllustration}
+              alt="No matches found"
+              className="w-72 h-72 rounded-md"
+              resizeMode="cover"
+            />
+          </Box>
+        )
       ) : (
-        <Box className="flex-1 items-center justify-center">
-          <Text className="text-base text-typography-700 mt-12">search our product catalogue</Text>
+        <Box className="flex items-center py-5">
+          <Image
+            source={searchIllustration}
+            alt="Search our spare parts"
+            className="w-72 h-72 rounded-md"
+            resizeMode="cover"
+          />
         </Box>
       )}
     </SafeAreaView>
