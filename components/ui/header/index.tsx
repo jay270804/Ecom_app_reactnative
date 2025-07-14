@@ -37,33 +37,45 @@ export function Header() {
           {/* The overlay Pressable */}
           <Pressable
             className="absolute left-0 top-0 right-0 bottom-0"
-            onPress={() => router.push('/search')}
-            style={{ backgroundColor: 'transparent' }}
+            onPress={() => router.push("/search")}
+            style={{ backgroundColor: "transparent" }}
           />
         </Box>
         {/* TODO: get a high definition svg */}
-        <Pressable
-          onPress={() => router.push('/cart')}
-        >
-          <ShoppingCart height={20} width={20}/>
+        <Pressable onPress={() => router.push("/cart")}>
+          <ShoppingCart height={20} width={20} />
         </Pressable>
       </Box>
     </Box>
   );
 }
 
-export function ProductHeader({ onWishlistPress, wishlisted }: { onWishlistPress?: () => void; wishlisted?: boolean }) {
+export function ProductHeader({
+  onWishlistPress,
+  wishlisted,
+}: {
+  onWishlistPress?: () => void;
+  wishlisted?: boolean;
+}) {
   const router = useRouter();
   return (
     <Box className="w-full flex-row items-center justify-between px-5 py-4 border-b-2 border-secondary-500 overflow-hidden h-[56px]">
       {/* Back button */}
-      <Pressable onPress={() => router.back()} className="w-8 items-start justify-center">
+      <Pressable
+        onPress={() => router.back()}
+        className="w-8 items-start justify-center"
+      >
         <MaterialIcons name="arrow-back" size={28} color="#68686B" />
       </Pressable>
       {/* Centered Title */}
-      <Text className="text-primary-950 font-bold text-lg text-center flex-1">Product</Text>
+      <Text className="text-primary-950 font-bold text-lg text-center flex-1">
+        Product
+      </Text>
       {/* Wishlist icon */}
-      <Pressable onPress={onWishlistPress} className="w-8 items-end justify-center">
+      <Pressable
+        onPress={onWishlistPress}
+        className="w-8 items-end justify-center"
+      >
         <MaterialIcons
           name={wishlisted ? "favorite" : "favorite-border"}
           size={26}
@@ -87,18 +99,17 @@ export function SearchHeader({
   return (
     <Box className="w-full flex-row items-center justify-between px-5 py-4 border-b-2 border-secondary-500 h-[56px]">
       {/* Back arrow */}
-      <Pressable onPress={() => router.back()} className="w-8 items-start justify-center">
+      <Pressable
+        onPress={() => router.back()}
+        className="w-8 items-start justify-center"
+      >
         <MaterialIcons name="arrow-back" size={28} color="#68686B" />
       </Pressable>
       {/* Centered Search Input */}
       <Box className="flex-1 mx-6">
         <Input className="flex-row items-center bg-secondary-500 rounded-2xl h-9 px-4 border-2 border-secondary-700">
-          <InputSlot className="pl-0 pr-2">
-            <Image
-              source={require("@/assets/images/search_icon.png")}
-              className="w-5 h-5"
-              alt="search_icon"
-            />
+          <InputSlot className="flex mt-1 pr-2">
+            <SearchIcon height={20} width={20} />
           </InputSlot>
           <InputField
             ref={inputRef}
