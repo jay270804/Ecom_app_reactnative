@@ -34,19 +34,19 @@ export default function Account() {
             {/* Actions */}
             <Box className="gap-4">
               <Button
-                className="bg-tertiary-500 rounded-full"
+                className="bg-tertiary-500 rounded-md"
                 onPress={() => router.push("/orders")}
               >
                 <ButtonText className="text-base font-bold text-typography-0">My Orders</ButtonText>
               </Button>
               <Button
-                className="border border-tertiary-500 rounded-full bg-transparent"
+                className="border border-tertiary-500 rounded-md bg-transparent"
                 onPress={() => router.push({ pathname: '/addresses' } as any)}
               >
                 <ButtonText className="text-base font-bold text-tertiary-600">Manage Addresses</ButtonText>
               </Button>
               <Button
-                className="bg-transparent rounded-full border border-outline-500"
+                className="bg-transparent rounded-md border border-outline-500"
                 onPress={logout}
                 isDisabled={isLoading}
               >

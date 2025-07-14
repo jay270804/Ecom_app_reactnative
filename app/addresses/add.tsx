@@ -74,7 +74,13 @@ export default function AddAddress() {
       });
       return false;
     }
-    if (form.PIN.length < 5) {
+    if (
+      !form.PIN ||
+      form.PIN.length !== 6 ||
+      isNaN(Number(form.PIN)) ||
+      Number(form.PIN) < 100000 ||
+      Number(form.PIN) > 999999
+    ) {
       setError("Please enter a valid PIN code");
       toast.show({
         render: ({ id }) => (
@@ -112,10 +118,11 @@ export default function AddAddress() {
                 <InputField
                   value={form.title}
                   onChangeText={(v) => handleChange("title", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   onFocus={() => setFocus("title")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="Home / Office / Other"
                 />
               </Input>
             </Box>
@@ -126,10 +133,11 @@ export default function AddAddress() {
                 <InputField
                   value={form.AddrLine1}
                   onChangeText={(v) => handleChange("AddrLine1", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   onFocus={() => setFocus("AddrLine1")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="123 Main St, Block A"
                 />
               </Input>
             </Box>
@@ -140,10 +148,11 @@ export default function AddAddress() {
                 <InputField
                   value={form.AddrLine2}
                   onChangeText={(v) => handleChange("AddrLine2", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   onFocus={() => setFocus("AddrLine2")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="Apartment, Suite, etc. (optional)"
                 />
               </Input>
             </Box>
@@ -154,10 +163,11 @@ export default function AddAddress() {
                 <InputField
                   value={form.city}
                   onChangeText={(v) => handleChange("city", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   onFocus={() => setFocus("city")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="Ahmedabad"
                 />
               </Input>
             </Box>
@@ -168,10 +178,11 @@ export default function AddAddress() {
                 <InputField
                   value={form.state}
                   onChangeText={(v) => handleChange("state", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   onFocus={() => setFocus("state")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="Gujarat"
                 />
               </Input>
             </Box>
@@ -182,11 +193,12 @@ export default function AddAddress() {
                 <InputField
                   value={form.PIN}
                   onChangeText={(v) => handleChange("PIN", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   keyboardType="number-pad"
                   onFocus={() => setFocus("PIN")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="380001"
                 />
               </Input>
             </Box>
@@ -197,10 +209,11 @@ export default function AddAddress() {
                 <InputField
                   value={form.landmark}
                   onChangeText={(v) => handleChange("landmark", v)}
-                  className="text-typography-900 text-sm"
+                  className="text-typography-900 text-sm placeholder:text-typography-400"
                   onFocus={() => setFocus("landmark")}
                   onBlur={() => setFocus(null)}
                   editable={!isLoading}
+                  placeholder="Near City Mall"
                 />
               </Input>
             </Box>

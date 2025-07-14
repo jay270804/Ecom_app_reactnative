@@ -122,7 +122,7 @@ export default function Cart() {
           {/* Address Selection */}
           {!isEmpty && (
             <Card className="mb-6 p-4 bg-background-0 rounded-2xl">
-              <Text className="text-base font-semibold mb-2">Select Shipping Address</Text>
+              <Heading className="text-lg font-semibold tracking-tighter mb-2">Select Shipping Address</Heading>
               {isAddressesLoading ? (
                 <Text>Loading addresses...</Text>
               ) : addresses && addresses.length > 0 ? (
@@ -140,14 +140,23 @@ export default function Cart() {
                         <Box className="w-3 h-3 rounded-full bg-white" />
                       )}
                     </Box>
-                    <Text className="flex-1">
-                      {address.title}: {address.AddrLine1}, {address.city}, {address.state} - {address.PIN}
+                    <Text className="flex-1 text-sm">
+                      <Text className="text-tertiary-500 text-sm">{address.title}:</Text>
+                      {` ${address.AddrLine1}, ${address.city}, ${address.state} - ${address.PIN}`}
                     </Text>
                   </Pressable>
                 ))
               ) : (
                 <Text>No addresses found. Please add one in your profile.</Text>
               )}
+              {/* Add address button */}
+              <Button
+                variant="outline"
+                className="mt-3 border-tertiary-500"
+                onPress={() => router.push("/addresses/add")}
+              >
+                <ButtonText className="text-sm text-tertiary-500">Add address</ButtonText>
+              </Button>
             </Card>
           )}
           <VStack space="md">

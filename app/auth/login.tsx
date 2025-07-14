@@ -39,8 +39,9 @@ export default function Login() {
   const handleSubmit = async () => {
     // Validate form
     if (!form.email || !form.password) {
-      setError("Please fill in all fields");
+      setError("Please fill in both fields");
       toast.show({
+        placement: "bottom",
         render: ({ id }) => {
           return (
             <Toast nativeID={id} action="error" variant="solid">

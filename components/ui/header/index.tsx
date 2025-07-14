@@ -1,3 +1,5 @@
+import SearchIcon from "@/components/svg/SearchIcon";
+import ShoppingCart from "@/components/svg/ShoppingCart";
 import { Box } from "@/components/ui/box";
 import { Image } from "@/components/ui/image";
 import { Input, InputField, InputSlot } from "@/components/ui/input";
@@ -6,8 +8,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable } from "../pressable";
-import ShoppingCart from "@/components/svg/ShoppingCart";
-import SearchIcon from "@/components/svg/SearchIcon";
 
 export function Header() {
   const router = useRouter();
@@ -23,8 +23,8 @@ export function Header() {
         <Box className="relative flex-1 h-9">
           {/* The Input (search bar) */}
           <Input className="flex-1 flex-row items-center justify-center bg-secondary-400 rounded-2xl mx-2 px-3 border border-secondary-800">
-            <InputSlot className="pl-0 pr-2">
-              <SearchIcon height={20} width={20}/>
+            <InputSlot className="flex mt-1 pr-2">
+              <SearchIcon height={20} width={20} />
             </InputSlot>
             <InputField
               placeholder="Search"

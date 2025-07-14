@@ -52,7 +52,7 @@ export default function Addresses() {
           }}
         >
           <Pressable
-            className="flex-1 bg-tertiary-500 rounded-full py-3 mx-2 items-center justify-center"
+            className="flex-1 bg-tertiary-500 rounded-full py-4 mx-2 items-center justify-center"
             onPress={() => router.push("/addresses/add")}
           >
             <Text className="text-typography-0 text-base font-bold">
