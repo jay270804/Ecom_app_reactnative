@@ -4,7 +4,7 @@
     "slug": "zorba-dummy",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/app-icon.png",
+    "icon": "./assets/images/app-icon-1.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -12,13 +12,13 @@
       "supportsTablet": true
     },
     "android": {
-      "icon": "./assets/images/app-icon.png",
+      "icon": "./assets/images/app-icon-1.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/app-icon.png",
+        "foregroundImage": "./assets/images/app-icon-1.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.myapp"
+      "package": "com.jay.zorbadummy"
     },
     "web": {
       "bundler": "metro",
