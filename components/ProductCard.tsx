@@ -18,12 +18,14 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({product, onPress}: ProductCardProps){
-    const { addToCart, isInCart } = useCartStore();
+    const { addToCart, isInCart, items, removeFromCart, updateQuantity } = useCartStore();
     const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlistStore();
     const { isAuthenticated } = useAuthStore();
     const router = useRouter();
 
     const inCart = isInCart(product?.id ?? "");
+    const cartItem = items.find((item) => item.product.id === product?.id);
+    const cartQty = cartItem ? cartItem.quantity : 0;
     const wishlisted = isWishlisted(product?.id ?? "");
     const hasDiscount = !!product?.discountPercentage && product.discountPercentage > 0 && product.discountedPrice;
 
@@ -84,15 +86,41 @@ export default function ProductCard({product, onPress}: ProductCardProps){
               </VStack>
             </Box>
             <Box className="flex flex-col">
-              <Button
-                className="px-3 py-2 mb-2 bg-primary-600"
-                onPress={() => addToCart(product)}
-                disabled={inCart}
-              >
-                <ButtonText size="xs" className="text-typography-0">
-                  {inCart ? "Added" : "Add to cart"}
-                </ButtonText>
-              </Button>
+              {/* Add to Cart or Quantity Controls */}
+              {!inCart ? (
+                <Button
+                  className="px-3 py-2 mb-2 bg-primary-600"
+                  onPress={() => addToCart(product)}
+                >
+                  <ButtonText size="xs" className="text-typography-0">
+                    Add to cart
+                  </ButtonText>
+                </Button>
+              ) : (
+                <Box className="flex-row items-center justify-between px-1 py-1 mb-2 bg-primary-600 rounded">
+                  <Pressable
+                    className="rounded-md items-center justify-center w-8 h-8 bg-primary-700"
+                    onPress={() => {
+                      if (cartQty === 1) {
+                        removeFromCart(product.id);
+                      } else {
+                        updateQuantity(product.id, cartQty - 1);
+                      }
+                    }}
+                  >
+                    <Text className="text-xl text-typography-0 text-center">-</Text>
+                  </Pressable>
+                  <Text className="mx-2 text-sm font-semibold text-typography-0 min-w-[16px] text-center">
+                    {cartQty}
+                  </Text>
+                  <Pressable
+                    className="rounded-md items-center justify-center w-8 h-8 bg-primary-700"
+                    onPress={() => updateQuantity(product.id, cartQty + 1)}
+                  >
+                    <Text className="text-xl text-typography-0 text-center">+</Text>
+                  </Pressable>
+                </Box>
+              )}
               <Button
                 variant={wishlisted ? "solid" : "outline"}
                 action="default"
