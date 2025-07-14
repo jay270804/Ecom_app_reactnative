@@ -6,6 +6,7 @@ import { ProductHeader } from "@/components/ui/header";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { useProduct } from "@/lib/query/hooks";
+import { useAuthStore } from "@/store/slices/authSlice";
 import { useCartStore } from "@/store/slices/cartSlice";
 import { useWishlistStore } from "@/store/slices/wishlistSlice";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -25,12 +26,22 @@ export default function ProductScreen() {
   // Zustand stores
   const { addToCart, removeFromCart, updateQuantity, items: cartItems, isInCart } = useCartStore();
   const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlistStore();
+  const { isAuthenticated } = useAuthStore();
 
   // Cart state for this product
   const cartItem = cartItems.find((item) => item.product.id === product?.id);
   const cartQty = cartItem ? cartItem.quantity : 0;
   const inCart = !!cartItem;
   const wishlisted = product?.id ? isWishlisted(product.id) : false;
+
+  // Wishlist handler with auth check
+  const handleWishlistPress = () => {
+    if (!isAuthenticated) {
+      router.push('/auth/login');
+    } else if (product?.id) {
+      wishlisted ? removeFromWishlist(product.id) : addToWishlist(product.id);
+    }
+  };
 
   // Use coverImage as the first image, then the rest from images[]
   const images = product
@@ -48,9 +59,7 @@ export default function ProductScreen() {
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
       {/* Consistent Product Header */}
       <ProductHeader
-        onWishlistPress={() =>
-          wishlisted ? removeFromWishlist(product.id) : addToWishlist(product.id)
-        }
+        onWishlistPress={handleWishlistPress}
         wishlisted={wishlisted}
       />
       {/* Main Content Box */}
@@ -119,7 +128,13 @@ export default function ProductScreen() {
             <Box className="flex-row flex-1 items-center justify-between py-2 px-4 border-2 rounded-full border-outline-800 mx-2">
               <Pressable
                 className="w-8 rounded-full items-center justify-center"
-                onPress={() => updateQuantity(product.id, Math.max(1, cartQty - 1))}
+                onPress={() => {
+                  if (cartQty === 1) {
+                    removeFromCart(product.id);
+                  } else {
+                    updateQuantity(product.id, cartQty - 1);
+                  }
+                }}
               >
                 <Text className="text-xl text-typography-900">-</Text>
               </Pressable>
