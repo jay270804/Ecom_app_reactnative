@@ -1,3 +1,4 @@
+import AddressSelectSkeleton from "@/components/skeletons/AddressSelectSkeleton";
 import { AlertDialog, AlertDialogBackdrop, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -124,7 +125,7 @@ export default function Cart() {
             <Card className="mb-6 p-4 bg-background-0 rounded-2xl">
               <Heading className="text-lg font-semibold tracking-tighter mb-2">Select Shipping Address</Heading>
               {isAddressesLoading ? (
-                <Text>Loading addresses...</Text>
+                <AddressSelectSkeleton />
               ) : addresses && addresses.length > 0 ? (
                 addresses.map((address: any) => (
                   <Pressable
