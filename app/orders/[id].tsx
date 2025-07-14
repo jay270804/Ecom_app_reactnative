@@ -15,7 +15,7 @@ export default function OrderDetails() {
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
       <RegisterHeader title="Order" />
-      <Box className="flex-1 bg-background-50 px-4 py-8">
+      <Box className="flex-1 px-4 py-8">
         {isLoading ? (
           <Box className="flex-1 justify-center items-center">
             <Spinner size="large" />
@@ -23,7 +23,7 @@ export default function OrderDetails() {
         ) : isError || !order ? (
           <Text className="text-red-500">{error?.message || "Failed to fetch order."}</Text>
         ) : (
-          <Card className="p-5 rounded-2xl bg-background-0 shadow-md mb-4">
+          <Card className="p-5 rounded-2xl bg-background-50 shadow-md mb-4">
             <Text className="text-base font-bold text-typography-900 mb-1">
               Order #{order._id.slice(-6).toUpperCase()}
             </Text>
