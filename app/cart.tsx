@@ -1,5 +1,7 @@
 import AddressSelectSkeleton from "@/components/skeletons/AddressSelectSkeleton";
-import { AlertDialog, AlertDialogBackdrop, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from "@/components/ui/alert-dialog";
+import AuthRequiredAlert from "@/components/ui/alert-dialog/AuthRequiredAlert";
+import RemoveItemAlert from "@/components/ui/alert-dialog/RemoveItemAlert";
+import SelectAddressAlert from "@/components/ui/alert-dialog/SelectAddressAlert";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -16,7 +18,7 @@ import { CartItem, useCartStore } from "@/store/slices/cartSlice";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Alert, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -35,6 +37,9 @@ export default function Cart() {
   // Alert dialog state
   const [showRemoveDialog, setShowRemoveDialog] = React.useState(false);
   const [itemToRemove, setItemToRemove] = React.useState<{ productId: string; productName: string } | null>(null);
+  // New: Address selection alert dialog state
+  const [showAddressDialog, setShowAddressDialog] = React.useState(false);
+  const [showAuthDialog, setShowAuthDialog] = React.useState(false);
 
   // Pricing calculations
   const subtotalRaw = cart.reduce(
@@ -85,25 +90,11 @@ export default function Cart() {
   // Handle checkout with authentication check
   const handleCheckout = () => {
     if (!isAuthenticated) {
-      Alert.alert(
-        "Authentication Required",
-        "Please login or register to complete your order.",
-        [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Login",
-            onPress: () => router.push("/auth/login")
-          },
-          {
-            text: "Register",
-            onPress: () => router.push("/auth/register")
-          },
-        ]
-      );
+      setShowAuthDialog(true);
       return;
     }
     if (!selectedAddressId) {
-      Alert.alert("Select Address", "Please select a shipping address before checkout.");
+      setShowAddressDialog(true);
       return;
     }
     // Proceed to checkout if authenticated and address selected
@@ -288,41 +279,27 @@ export default function Cart() {
       </Box>
 
       {/* Remove Item Confirmation Dialog */}
-      <AlertDialog isOpen={showRemoveDialog} onClose={handleRemoveCancel}>
-        <AlertDialogBackdrop />
-        <AlertDialogContent className="w-4/5 max-w-[415px] gap-4 px-5 items-center">
-          <Box className="rounded-full h-[52px] w-[52px] bg-background-error items-center justify-center">
-            <MaterialIcons name="remove-shopping-cart" size={24} color="#EF4444" />
-          </Box>
-          <AlertDialogHeader className="mb-2">
-            <Heading size="md">Remove Item</Heading>
-          </AlertDialogHeader>
-          <AlertDialogBody>
-            <Text size="sm" className="text-center text-typography-700">
-              Are you sure you want to remove "{itemToRemove?.productName}" from your cart?
-            </Text>
-          </AlertDialogBody>
-          <AlertDialogFooter className="mt-5">
-            <Button
-              size="sm"
-              action="negative"
-              onPress={handleRemoveConfirm}
-              className="px-[30px]"
-            >
-              <ButtonText>Remove</ButtonText>
-            </Button>
-            <Button
-              variant="outline"
-              action="secondary"
-              onPress={handleRemoveCancel}
-              size="sm"
-              className="px-[30px] border-tertiary-500"
-            >
-              <ButtonText className="text-tertiary-500">Cancel</ButtonText>
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <RemoveItemAlert
+        isOpen={showRemoveDialog}
+        onClose={handleRemoveCancel}
+        onRemove={handleRemoveConfirm}
+        productName={itemToRemove?.productName}
+      />
+      {/* Address Selection Required Dialog */}
+      <SelectAddressAlert isOpen={showAddressDialog} onClose={() => setShowAddressDialog(false)} />
+      {/* Authentication Required Dialog */}
+      <AuthRequiredAlert
+        isOpen={showAuthDialog}
+        onClose={() => setShowAuthDialog(false)}
+        onLogin={() => {
+          setShowAuthDialog(false);
+          router.push("/auth/login");
+        }}
+        onRegister={() => {
+          setShowAuthDialog(false);
+          router.push("/auth/register");
+        }}
+      />
     </SafeAreaView>
   );
 }
