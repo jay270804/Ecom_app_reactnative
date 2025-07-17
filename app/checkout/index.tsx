@@ -1,7 +1,7 @@
 import { Box } from "@/components/ui/box";
 import { Card } from "@/components/ui/card";
+import { FloatingActionButton } from "@/components/ui/FloatingActionButton";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
-import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { useAddresses, useCreateRazorpayOrder, useVerifyPaymentAndCreateOrder } from "@/lib/query/hooks";
 import { useCartStore } from "@/store/slices/cartSlice";
@@ -116,27 +116,7 @@ export default function Checkout() {
           </Card>
         </ScrollView>
         {/* Floating Pay Button */}
-        <Box
-          className="flex-row items-center bg-background-100 mx-4 rounded-full shadow-lg"
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: insets.bottom,
-            height: 64,
-            marginBottom: 24,
-            marginHorizontal: 16,
-            zIndex: 10,
-            justifyContent: "center",
-          }}
-        >
-          <Pressable
-            className="flex-1 bg-tertiary-500 rounded-full py-4 mx-2 items-center justify-center"
-            onPress={handlePay}
-          >
-            <Text className="text-typography-0 text-base font-bold">Pay with Razorpay</Text>
-          </Pressable>
-        </Box>
+        <FloatingActionButton onPress={handlePay} text="Pay with Razorpay" />
       </Box>
     </SafeAreaView>
   );

@@ -2,6 +2,7 @@ import ProductCarousel from "@/components/ProductCarousel";
 import ProductDetailsSkeleton from "@/components/skeletons/ProductDetailsSkeleton";
 import { Box } from "@/components/ui/box";
 import { Card } from "@/components/ui/card";
+import { FloatingActionButton } from "@/components/ui/FloatingActionButton";
 import { ProductHeader } from "@/components/ui/header";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
@@ -95,26 +96,15 @@ export default function ProductScreen() {
         )}
       </Box>
       {/* Floating Add to Cart / Quantity Control - styled like CustomTabBar */}
-      <Box
-        className="flex-row items-center bg-background-300 mx-4 rounded-full shadow-lg"
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: insets.bottom,
-          height: 64,
-          marginBottom: 24,
-          marginHorizontal: 16,
-          zIndex: 10,
-          justifyContent: "center",
-        }}
-      >
+      <FloatingActionButton>
         {cartQty === 0 ? (
           <Pressable
             className="flex-1 bg-tertiary-500 rounded-full py-4 mx-2 items-center justify-center"
             onPress={() => addToCart(product)}
           >
-            <Text className="text-typography-0 text-base font-bold">Add to Cart</Text>
+            <Text className="text-typography-0 text-base font-bold">
+              Add to Cart
+            </Text>
           </Pressable>
         ) : (
           <>
@@ -147,7 +137,7 @@ export default function ProductScreen() {
             </Box>
           </>
         )}
-      </Box>
+      </FloatingActionButton>
     </SafeAreaView>
   );
 }

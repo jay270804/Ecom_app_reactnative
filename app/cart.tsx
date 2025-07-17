@@ -5,6 +5,7 @@ import SelectAddressAlert from "@/components/ui/alert-dialog/SelectAddressAlert"
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { FloatingActionButton } from "@/components/ui/FloatingActionButton";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
 import { Heading } from "@/components/ui/heading";
 import { Image } from "@/components/ui/image";
@@ -20,8 +21,8 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView } from "react-native";
 import {
-    SafeAreaView,
-    useSafeAreaInsets,
+  SafeAreaView,
+  useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
 export default function Cart() {
@@ -252,29 +253,10 @@ export default function Cart() {
           )}
         </ScrollView>
         {/* Absolute Place Order/Browse Products Button */}
-        <Box
-          className="flex-row items-center bg-background-100 mx-4 rounded-full shadow-lg"
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: insets.bottom,
-            height: 64,
-            marginBottom: 24,
-            marginHorizontal: 16,
-            zIndex: 10,
-            justifyContent: "center",
-          }}
-        >
-          <Pressable
-            className="flex-1 bg-tertiary-500 rounded-full py-4 mx-2 items-center justify-center"
-            onPress={() => isEmpty ? router.push("/") : handleCheckout()}
-          >
-            <Text className="text-typography-0 text-base font-bold">
-              {isEmpty ? "Browse Products" : "Place Order"}
-            </Text>
-          </Pressable>
-        </Box>
+        <FloatingActionButton
+          onPress={() => (isEmpty ? router.push("/") : handleCheckout())}
+          text={isEmpty ? "Browse Products" : "Place Order"}
+        />
       </Box>
 
       {/* Remove Item Confirmation Dialog */}

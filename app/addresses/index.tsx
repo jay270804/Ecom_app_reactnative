@@ -1,8 +1,8 @@
 import AddressesSkeleton from "@/components/skeletons/AddressesSkeleton";
 import { Box } from "@/components/ui/box";
 import { Card } from "@/components/ui/card";
+import { FloatingActionButton } from "@/components/ui/FloatingActionButton";
 import { RegisterHeader } from "@/components/ui/header/RegisterHeader";
-import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { useAddresses } from "@/lib/query/hooks";
 import { useRouter } from "expo-router";
@@ -39,29 +39,10 @@ export default function Addresses() {
           </ScrollView>
         )}
         {/* TODO: Post address api */}
-        <Box
-          className="flex-row items-center bg-background-100 mx-4 rounded-full shadow-lg"
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: insets.bottom,
-            height: 64,
-            marginBottom: 24,
-            marginHorizontal: 16,
-            zIndex: 10,
-            justifyContent: "center",
-          }}
-        >
-          <Pressable
-            className="flex-1 bg-tertiary-500 rounded-full py-4 mx-2 items-center justify-center"
-            onPress={() => router.push("/addresses/add")}
-          >
-            <Text className="text-typography-0 text-base font-bold">
-              Add New Address
-            </Text>
-          </Pressable>
-        </Box>
+        <FloatingActionButton
+          onPress={() => router.push("/addresses/add")}
+          text="Add New Address"
+        />
       </Box>
     </SafeAreaView>
   );
