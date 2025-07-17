@@ -101,12 +101,11 @@ export default function ProductScreen() {
           position: "absolute",
           left: 0,
           right: 0,
-          bottom: 0,
+          bottom: insets.bottom,
+          height: 64,
+          marginBottom: 24,
           marginHorizontal: 16,
-          marginBottom: 24 + insets.bottom,
           zIndex: 10,
-          paddingBottom: insets.bottom,
-          height: 64 + insets.bottom,
           justifyContent: "center",
         }}
       >

@@ -1,7 +1,6 @@
 import SearchIcon from "@/components/svg/SearchIcon";
 import ShoppingCart from "@/components/svg/ShoppingCart";
 import { Box } from "@/components/ui/box";
-import { Image } from "@/components/ui/image";
 import { Input, InputField, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -9,7 +8,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable } from "../pressable";
 
-export function Header() {
+export function Header({ hideSearchPressable = false }: { hideSearchPressable?: boolean } = {}) {
   const router = useRouter();
   return (
     <Box
@@ -19,30 +18,34 @@ export function Header() {
       <Text className="text-primary-950 font-bold text-[12px] leading-[11.64px] tracking-tight">
         Brand
       </Text>
-      <Box className="w-2/3 flex flex-row items-center justify-between gap-4">
-        <Box className="relative flex-1 h-9">
-          {/* The Input (search bar) */}
-          <Input className="flex-1 flex-row items-center justify-center bg-secondary-400 rounded-2xl mx-2 px-3 border border-secondary-800">
-            <InputSlot className="flex mt-1 pr-2">
-              <SearchIcon height={20} width={20} />
-            </InputSlot>
-            <InputField
-              placeholder="Search"
-              type="text"
-              className="text-secondary-500 text-[12px] font-light"
-              editable={false}
-              pointerEvents="none"
+      {/* 👇 **EDITED LINE HERE** 👇 */}
+      <Box className="w-2/3 flex flex-row items-center justify-end gap-4">
+        {/* Hide search bar and pressable if hideSearchPressable is true */}
+        {!hideSearchPressable && (
+          <Box className="relative flex-1 h-9">
+            {/* The Input (search bar) */}
+            <Input className="flex-1 flex-row items-center justify-center bg-secondary-400 rounded-2xl mx-2 px-3 border border-secondary-800">
+              <InputSlot className="flex mt-1 pr-2">
+                <SearchIcon height={20} width={20} />
+              </InputSlot>
+              <InputField
+                placeholder="Search"
+                type="text"
+                className="text-secondary-500 text-[12px] font-light"
+                editable={false}
+                pointerEvents="none"
+              />
+            </Input>
+            {/* The overlay Pressable */}
+            <Pressable
+              className="absolute left-0 top-0 right-0 bottom-0"
+              onPress={() => router.push("/search")}
+              style={{ backgroundColor: "transparent" }}
             />
-          </Input>
-          {/* The overlay Pressable */}
-          <Pressable
-            className="absolute left-0 top-0 right-0 bottom-0"
-            onPress={() => router.push("/search")}
-            style={{ backgroundColor: "transparent" }}
-          />
-        </Box>
-        {/* TODO: get a high definition svg */}
-        <Pressable onPress={() => router.push("/cart")}>
+          </Box>
+        )}
+        {/* Cart Icon */}
+        <Pressable onPress={() => router.push("/cart")} hitSlop={24}>
           <ShoppingCart height={20} width={20} />
         </Pressable>
       </Box>
@@ -64,6 +67,7 @@ export function ProductHeader({
       <Pressable
         onPress={() => router.back()}
         className="w-8 items-start justify-center"
+        hitSlop={24}
       >
         <MaterialIcons name="arrow-back" size={28} color="#68686B" />
       </Pressable>
@@ -102,6 +106,7 @@ export function SearchHeader({
       <Pressable
         onPress={() => router.back()}
         className="w-8 items-start justify-center"
+        hitSlop={24}
       >
         <MaterialIcons name="arrow-back" size={28} color="#68686B" />
       </Pressable>

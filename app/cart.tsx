@@ -20,8 +20,8 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView } from "react-native";
 import {
-  SafeAreaView,
-  useSafeAreaInsets,
+    SafeAreaView,
+    useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
 export default function Cart() {
@@ -258,12 +258,11 @@ export default function Cart() {
             position: "absolute",
             left: 0,
             right: 0,
-            bottom: 0,
+            bottom: insets.bottom,
+            height: 64,
+            marginBottom: 24,
             marginHorizontal: 16,
-            marginBottom: 24 + insets.bottom,
             zIndex: 10,
-            paddingBottom: insets.bottom,
-            height: 64 + insets.bottom,
             justifyContent: "center",
           }}
         >
