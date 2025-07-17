@@ -143,6 +143,10 @@ export const addressService = {
   create: async (address: any): Promise<any> => {
     return apiClient.post<any>('/api/addresses', address);
   },
+  // Delete an address by ID
+  delete: async (id: string): Promise<any> => {
+    return apiClient.delete<any>(`/api/addresses/${id}`);
+  },
 };
 
 // Order & Payment Services

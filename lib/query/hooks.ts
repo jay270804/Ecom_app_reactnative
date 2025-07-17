@@ -218,6 +218,16 @@ export const useAddresses = () => {
   });
 };
 
+export const useDeleteAddress = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => addressService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['addresses'] });
+    },
+  });
+};
+
 // Order Hooks
 export const useOrders = () => {
   return useQuery({
