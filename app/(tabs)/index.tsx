@@ -106,7 +106,8 @@ export default function Index() {
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1, backgroundColor: "transparent" }}>
-      <Header hideSearchPressable />
+      {/* <Header hideSearchPressable /> */}
+      <Header />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
         <Box>
           <PromoCarousel promos={promoProducts} />

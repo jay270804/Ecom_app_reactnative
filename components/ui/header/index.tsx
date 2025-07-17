@@ -67,7 +67,7 @@ export function ProductHeader({
       <Pressable
         onPress={() => router.back()}
         className="w-8 items-start justify-center"
-        hitSlop={24}
+        hitSlop={28}
       >
         <MaterialIcons name="arrow-back" size={28} color="#68686B" />
       </Pressable>
@@ -106,7 +106,7 @@ export function SearchHeader({
       <Pressable
         onPress={() => router.back()}
         className="w-8 items-start justify-center"
-        hitSlop={24}
+        hitSlop={28}
       >
         <MaterialIcons name="arrow-back" size={28} color="#68686B" />
       </Pressable>
