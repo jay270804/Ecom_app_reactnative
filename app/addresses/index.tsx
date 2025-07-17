@@ -6,6 +6,7 @@ import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { useAddresses } from "@/lib/query/hooks";
 import { useRouter } from "expo-router";
+import { ScrollView } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Addresses() {
@@ -24,16 +25,18 @@ export default function Addresses() {
         ) : !addresses || addresses.length === 0 ? (
           <Text className="text-base text-typography-700">No addresses found.</Text>
         ) : (
-          <Box className="gap-4 mb-8">
-            {addresses.map((address: any) => (
-              <Card key={address._id} className="p-5 rounded-2xl bg-background-50 shadow-md mb-2">
-                <Text className="text-base font-bold text-typography-900 mb-1">{address.title}</Text>
-                <Text className="text-sm text-typography-700 mb-1">{address.AddrLine1}{address.AddrLine2 ? `, ${address.AddrLine2}` : ""}</Text>
-                <Text className="text-sm text-typography-700 mb-1">{address.city}, {address.state} - {address.PIN}</Text>
-                {address.landmark && <Text className="text-sm text-typography-700 mb-1">Landmark: {address.landmark}</Text>}
-              </Card>
-            ))}
-          </Box>
+          <ScrollView style={{ flexGrow: 0 }} contentContainerStyle={{ paddingBottom: 80 }}>
+            <Box className="gap-4 mb-8">
+              {addresses.map((address: any) => (
+                <Card key={address._id} className="p-5 rounded-2xl bg-background-50 shadow-md mb-2">
+                  <Text className="text-base font-bold text-typography-900 mb-1">{address.title}</Text>
+                  <Text className="text-sm text-typography-700 mb-1">{address.AddrLine1}{address.AddrLine2 ? `, ${address.AddrLine2}` : ""}</Text>
+                  <Text className="text-sm text-typography-700 mb-1">{address.city}, {address.state} - {address.PIN}</Text>
+                  {address.landmark && <Text className="text-sm text-typography-700 mb-1">Landmark: {address.landmark}</Text>}
+                </Card>
+              ))}
+            </Box>
+          </ScrollView>
         )}
         {/* TODO: Post address api */}
         <Box
